@@ -1,40 +1,86 @@
 ﻿@model Berber_Otomasyon.Models.ViewModels.RegisterObjectModel
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Register">
-            <h2>Müşteri Hesabı Oluştur</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-action="RegisterC" class="p-4 shadow rounded">
+            <h2 class="text-center mb-4">Çalışan Hesabı Oluştur</h2>
+            <hr class="mb-4" />
+            <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3" role="alert"></div>
+
+            <!-- Kullanıcı Adı -->
             <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.KullaniciAdi" class="form-control" autocomplete="username" aria-required="true" />
+                <input asp-for="registerViewModel.KullaniciAdi" class="form-control" autocomplete="username" aria-required="true" placeholder="Kullanıcı Adı" />
                 <label asp-for="registerViewModel.KullaniciAdi">Kullanıcı Adı</label>
                 <span asp-validation-for="registerViewModel.KullaniciAdi" class="text-danger"></span>
             </div>
+
+            <!-- Kullanıcı Soyadı -->
             <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.KullaniciSoyadi" class="form-control" autocomplete="username" aria-required="true" />
+                <input asp-for="registerViewModel.KullaniciSoyadi" class="form-control" autocomplete="username" aria-required="true" placeholder="Kullanıcı Soyadı" />
                 <label asp-for="registerViewModel.KullaniciSoyadi">Kullanıcı Soyadı</label>
                 <span asp-validation-for="registerViewModel.KullaniciSoyadi" class="text-danger"></span>
             </div>
+
+            <!-- Email -->
             <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <input asp-for="registerViewModel.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="registerViewModel.Email">Email</label>
                 <span asp-validation-for="registerViewModel.Email" class="text-danger"></span>
             </div>
+
+            <!-- Şifre -->
             <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <input asp-for="registerViewModel.Password" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre" />
                 <label asp-for="registerViewModel.Password">Şifre</label>
                 <span asp-validation-for="registerViewModel.Password" class="text-danger"></span>
             </div>
+
+            <!-- Şifre Tekrar -->
             <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <input asp-for="registerViewModel.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifreyi Tekrarla" />
                 <label asp-for="registerViewModel.ConfirmPassword">Şifreyi Tekrarla</label>
                 <span asp-validation-for="registerViewModel.ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Kaydol</button>
+
+            <!-- Kaydol Butonu -->
+            <button type="submit" class="w-100 btn btn-lg btn-dark">Kaydol</button>
         </form>
     </div>
 </div>
+
+<!-- Dahili CSS -->
+<style>
+    form {
+        border: 1px solid #e0e0e0;
+        background-color: #ffffff;
+        border-radius: 10px;
+    }
+
+    h2 {
+        color: #333333;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+        .form-control:focus {
+            border-color: #333333;
+            box-shadow: 0 0 5px rgba(51, 51, 51, 0.5);
+        }
+
+    button {
+        background-color: #333333;
+        color: #ffffff;
+        border-radius: 10px;
+    }
+
+        button:hover {
+            background-color: #555555;
+        }
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

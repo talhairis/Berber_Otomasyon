@@ -1,8 +1,100 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero">
+    <h1>Hoş Geldiniz</h1>
+    <p>Profesyonel hizmetlerimizle siz değerli müşterilerimizi bekliyoruz.</p>
+    <a href="Home/Appointment" class="btn btn-dark">Randevu Al</a>
 </div>
+
+<div class="services">
+    <div class="service">
+        <img src="~/img/3.jpg" alt="Sakal Tıraşı">
+        <h3>Sakal Tıraşı</h3>
+        <p>Profesyonel sakal şekillendirme ve bakım hizmeti.</p>
+    </div>
+    <div class="service">
+        <img src="~/img/1.jpg" alt="Saç Kesimi">
+        <h3>Saç Kesimi</h3>
+        <p>Uzman ekibimizle modern saç kesimleri.</p>
+    </div>
+    <div class="service">
+        <img src="~/img/2.jpg" alt="Saç Boyama">
+        <h3>Saç Boyama</h3>
+        <p>Kendi tarzınızı yaratmak için kişiye özel renkler.</p>
+    </div>
+</div>
+
+<style>
+    .hero {
+        text-align: center;
+        padding: 50px;
+        background-color: #F9F9F9;
+        width: 100%;
+    }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #555555;
+            margin: 10px 0 20px;
+        }
+
+        .hero button {
+            padding: 10px 20px;
+            background-color: #333333;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+        }
+
+            .hero button:hover {
+                background-color: #555555;
+            }
+
+    .services {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 50px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .service {
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        width: calc(33.333% - 20px);
+        text-align: center;
+        font-family: 'Playfair Display', serif;
+    }
+
+        .service img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .service h3 {
+            margin: 10px 0;
+            font-size: 20px;
+            color: #000000;
+        }
+
+        .service p {
+            font-size: 16px;
+            color: #555555;
+            margin: 0 10px 20px;
+        }
+</style>
