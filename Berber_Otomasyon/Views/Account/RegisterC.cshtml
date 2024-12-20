@@ -1,87 +1,155 @@
 ﻿@model Berber_Otomasyon.Models.ViewModels.RegisterObjectModel
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <form asp-action="RegisterC" class="p-4 shadow rounded">
-            <h2 class="text-center mb-4">Çalışan Hesabı Oluştur</h2>
-            <hr class="mb-4" />
-            <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3" role="alert"></div>
+<div class="add-employee-container">
+    <h1>Çalışan Ekle</h1>
+    <form asp-action="RegisterC" method="post">
+        <div class="row">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-            <!-- Kullanıcı Adı -->
-            <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.KullaniciAdi" class="form-control" autocomplete="username" aria-required="true" placeholder="Kullanıcı Adı" />
-                <label asp-for="registerViewModel.KullaniciAdi">Kullanıcı Adı</label>
-                <span asp-validation-for="registerViewModel.KullaniciAdi" class="text-danger"></span>
+            <!-- Sol Taraf: Ad, Soyad, E-posta, Parola -->
+            <div class="col-md-6">
+                <h2>Temel Bilgiler</h2>
+                <div class="form-group">
+                    <label asp-for="registerViewModel.KullaniciAdi">Ad</label>
+                    <input asp-for="registerViewModel.KullaniciAdi" class="form-control" placeholder="Adınızı girin" />
+                    <span asp-validation-for="registerViewModel.KullaniciAdi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="registerViewModel.KullaniciSoyadi">Soyad</label>
+                    <input asp-for="registerViewModel.KullaniciSoyadi" class="form-control" placeholder="Soyadınızı girin" />
+                    <span asp-validation-for="registerViewModel.KullaniciSoyadi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="registerViewModel.Email">E-posta</label>
+                    <input asp-for="registerViewModel.Email" class="form-control" placeholder="E-posta adresinizi girin" />
+                    <span asp-validation-for="registerViewModel.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="registerViewModel.Password">Parola</label>
+                    <input asp-for="registerViewModel.Password" type="password" class="form-control" placeholder="Parola girin" />
+                    <span asp-validation-for="registerViewModel.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="registerViewModel.ConfirmPassword">Parola (Tekrar)</label>
+                    <input asp-for="registerViewModel.ConfirmPassword" type="password" class="form-control" placeholder="Parolayı tekrar girin" />
+                    <span asp-validation-for="registerViewModel.ConfirmPassword" class="text-danger"></span>
+                </div>
             </div>
 
-            <!-- Kullanıcı Soyadı -->
-            <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.KullaniciSoyadi" class="form-control" autocomplete="username" aria-required="true" placeholder="Kullanıcı Soyadı" />
-                <label asp-for="registerViewModel.KullaniciSoyadi">Kullanıcı Soyadı</label>
-                <span asp-validation-for="registerViewModel.KullaniciSoyadi" class="text-danger"></span>
-            </div>
+            <!-- Sağ Taraf: Ünvan, İşlemler ve Randevular -->
+            <div class="col-md-6">
+                <h2>Unvan</h2>
+                <div class="form-group">
+                    <label>
+                        <input asp-for="registerViewModel.CalisanUnvan" type="radio" value="Çırak"> Çırak
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input asp-for="registerViewModel.CalisanUnvan" type="radio" value="Kalfa"> Kalfa
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input asp-for="registerViewModel.CalisanUnvan" type="radio" value="Usta"> Usta
+                    </label>
+                </div>
 
-            <!-- Email -->
-            <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.Email" class="form-control" autocomplete="email" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="registerViewModel.Email">Email</label>
-                <span asp-validation-for="registerViewModel.Email" class="text-danger"></span>
-            </div>
+                <h2>İşlemler</h2>
+                <div id="operations">
+                    @foreach (var islem in Model.addCalisanViewModel.IslemTurleri)
+                    {
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" name="selectedArrays.SelectedIslemTurleri" value="@islem.IslemTuruId" class="form-check-input" />
+                                <b>@islem.Isim</b> - @islem.Fiyat.ToString("C") (@islem.Sure dakika)<br />
+                                <small>@islem.Aciklama</small>
+                            </label>
+                        </div>
+                    }
+                        
+                </div>
 
-            <!-- Şifre -->
-            <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.Password" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre" />
-                <label asp-for="registerViewModel.Password">Şifre</label>
-                <span asp-validation-for="registerViewModel.Password" class="text-danger"></span>
-            </div>
 
-            <!-- Şifre Tekrar -->
-            <div class="form-floating mb-3">
-                <input asp-for="registerViewModel.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifreyi Tekrarla" />
-                <label asp-for="registerViewModel.ConfirmPassword">Şifreyi Tekrarla</label>
-                <span asp-validation-for="registerViewModel.ConfirmPassword" class="text-danger"></span>
+                <h2>Randevular</h2>
+                <div id="appointments">
+                    @foreach (var randevu in Model.addCalisanViewModel.Randevular)
+                    {
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="checkbox" name="selectedArrays.SelectedRandevular" value="@randevu.RandevuId" class="form-check-input" />
+                                Başlangıç: @randevu.BaslangicSaati.ToString("hh\\:mm") - Bitiş: @randevu.BitisSaati.ToString("hh\\:mm")
+                            </label>
+                        </div>
+                    }
+                </div>
             </div>
+        </div>
 
-            <!-- Kaydol Butonu -->
-            <button type="submit" class="w-100 btn btn-lg btn-dark">Kaydol</button>
-        </form>
-    </div>
+        <div class="form-group text-center mt-4">
+            <button type="submit" class="btn btn-dark">Çalışanı Kaydet</button>
+        </div>
+    </form>
 </div>
 
-<!-- Dahili CSS -->
 <style>
-    form {
-        border: 1px solid #e0e0e0;
-        background-color: #ffffff;
-        border-radius: 10px;
-    }
-
-    h2 {
-        color: #333333;
+    .add-employee-container {
+        max-width: 900px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
         font-family: 'Playfair Display', serif;
     }
 
-    .form-control {
-        border-radius: 10px;
-        border: 1px solid #ccc;
-    }
-
-        .form-control:focus {
-            border-color: #333333;
-            box-shadow: 0 0 5px rgba(51, 51, 51, 0.5);
+        .add-employee-container h1 {
+            font-size: 32px;
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
         }
 
-    button {
-        background-color: #333333;
-        color: #ffffff;
-        border-radius: 10px;
+        .add-employee-container h2 {
+            font-size: 24px;
+            color: #555555;
+            margin-bottom: 15px;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
     }
 
-        button:hover {
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #CCCCCC;
+        border-radius: 5px;
+    }
+
+    input[type="radio"], input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    .btn-dark {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        background-color: #333333;
+        color: #FFFFFF;
+        cursor: pointer;
+        border: none;
+    }
+
+        .btn-dark:hover {
             background-color: #555555;
         }
 </style>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}

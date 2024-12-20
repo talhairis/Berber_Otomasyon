@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Berber_Otomasyon.Models
 {
@@ -19,6 +20,9 @@ namespace Berber_Otomasyon.Models
         public TimeSpan BitisSaati { get; set; }
 
         public ICollection<CalisanRandevu>? CalisanRandevular { get; set; }
+
+        [NotMapped] // Veritabanına kaydedilmeyecek
+        public bool IsSelected { get; set; }
 
     }
 }

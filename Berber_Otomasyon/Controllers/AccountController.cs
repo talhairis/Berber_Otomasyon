@@ -63,7 +63,6 @@ namespace Berber_Otomasyon.Controllers
             RegisterObjectModel registerObjectModel = new RegisterObjectModel();
             registerObjectModel.addCalisanViewModel.Randevular = _applicationDbContext.Randevular.ToList();
             registerObjectModel.addCalisanViewModel.IslemTurleri = _applicationDbContext.IslemTurleri.ToList();
-            
             return View(registerObjectModel);
         }
 
@@ -71,40 +70,68 @@ namespace Berber_Otomasyon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterC(RegisterObjectModel registerObjectModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) { ViewData["Message"] = "Model başarılı değil"; }
+
+            var user = new Kullanici
             {
-                var user = new Kullanici { KullaniciAdi = registerObjectModel.registerViewModel.KullaniciAdi, 
-                    KullaniciSoyadi = registerObjectModel.registerViewModel.KullaniciSoyadi, 
-                    CalisanUnvan = registerObjectModel.registerViewModel.CalisanUnvan, 
-                    UserName = registerObjectModel.registerViewModel.Email,
-                    Email = registerObjectModel.registerViewModel.Email,
-                    CalisanRandevular = registerObjectModel.addCalisanViewModel.Randevular.Select(cr => new CalisanRandevu
-                    {
-                        RandevuId = cr.RandevuId
-                    }).ToList(),
-                    CalisanIslemler = registerObjectModel.addCalisanViewModel.IslemTurleri.Select(ci => new CalisanIslem
-                    {
-                        IslemTuruId = ci.IslemTuruId
-                    }).ToList()
-                };
-                var result = await _userManager.CreateAsync(user, registerObjectModel.registerViewModel.Password);
+                KullaniciAdi = registerObjectModel.registerViewModel.KullaniciAdi,
+                KullaniciSoyadi = registerObjectModel.registerViewModel.KullaniciSoyadi,
+                CalisanUnvan = registerObjectModel.registerViewModel.CalisanUnvan,
+                UserName = registerObjectModel.registerViewModel.Email,
+                Email = registerObjectModel.registerViewModel.Email,
+            };
 
-                if (result.Succeeded)
+            var result = await _userManager.CreateAsync(user, registerObjectModel.registerViewModel.Password);
+
+            if (result.Succeeded)
+            {
+                // Seçilen İşlem Türlerini Al ve Kaydet
+                if (registerObjectModel.selectedArrays.SelectedIslemTurleri != null)
                 {
-                    // Kullanıcıya "Müşteri" rolünü ata
-                    if (!await _roleManager.RoleExistsAsync("calisan"))
+                    foreach (var islemId in registerObjectModel.selectedArrays.SelectedIslemTurleri)
                     {
-                        await _roleManager.CreateAsync(new IdentityRole("calisan"));
+                        var calisanIslem = new CalisanIslem
+                        {
+                            CalisanId = user.Id,
+                            IslemTuruId = int.Parse(islemId) // string -> int dönüşümü
+                        };
+                        _applicationDbContext.CalisanIslemler.Add(calisanIslem);
                     }
-
-                    await _userManager.AddToRoleAsync(user, "calisan");
-
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    await _applicationDbContext.SaveChangesAsync();
-                    return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
             }
+
+            if (result.Succeeded)
+            {
+                // Seçilen İşlem Türlerini Al ve Kaydet
+                if (registerObjectModel.selectedArrays.SelectedRandevular != null)
+                {
+                    foreach (var randevuId in registerObjectModel.selectedArrays.SelectedRandevular)
+                    {
+                        var calisanRandevu = new CalisanRandevu
+                        {
+                            CalisanId = user.Id,
+                            RandevuId = int.Parse(randevuId) // string -> int dönüşümü
+                        };
+                        _applicationDbContext.CalisanRandevular.Add(calisanRandevu);
+                    }
+                }
+            }
+
+            if (result.Succeeded)
+            {
+                // Kullanıcıya "Müşteri" rolünü ata
+                if (!await _roleManager.RoleExistsAsync("calisan"))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole("calisan"));
+                }
+
+                await _userManager.AddToRoleAsync(user, "calisan");
+
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                await _applicationDbContext.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            AddErrors(result);
 
             return RedirectToAction(nameof(RegisterC));
         }

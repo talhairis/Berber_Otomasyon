@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -61,13 +60,20 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterM">Müşteri Olarak Kaydol</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>
-                    </li>
+
+                    <!-- Kullanıcı Giriş Durumuna Göre Linkler -->
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterM">Müşteri Olarak Kaydol</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>
+                        </li>
+                    }
                 </ul>
+
+                <!-- Partial Kullanımı -->
                 <partial name="_LoginPartial" />
             </div>
         </div>
