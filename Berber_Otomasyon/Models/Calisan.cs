@@ -20,10 +20,5 @@ namespace Berber_Otomasyon.Models
 		[Required(ErrorMessage = "Lütfen çalışan unvanını giriniz!")]
 		private string calisanUnvan;
 
-		[Display(Name = "Çalışan E-Maili")]
-		[Required(ErrorMessage = "Lütfen çalışan e-maili giriniz!")]
-		[EmailAddress(ErrorMessage = "Lütfen e-mail adresini doğru formatta giriniz!")]
-		private string calisanMail;
-
 	}
 }

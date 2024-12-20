@@ -16,10 +16,5 @@ namespace Berber_Otomasyon.Models
 		[StringLength(50, ErrorMessage = "Lütfen müşteri soyadını 50 karakterden fazla girmeyiniz!")]
 		private string musteriSoyad;
 
-		[Display(Name = "Müşteri E-Maili")]
-		[Required(ErrorMessage = "Lütfen müşteri e-maili giriniz!")]
-		[EmailAddress(ErrorMessage = "Lütfen e-mail adresini doğru formatta giriniz!")]
-		private string musteriMail;
-
 	}
 }
