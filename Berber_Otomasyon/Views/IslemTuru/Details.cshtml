@@ -1,42 +1,89 @@
 ﻿@model Berber_Otomasyon.Models.IslemTuru
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "İşlem Türü Detayları";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>IslemTuru</h4>
+<div class="details-container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Isim)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Isim)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Aciklama)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Aciklama)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fiyat)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fiyat)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sure)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sure)
-        </dd>
-    </dl>
+    <div class="details">
+        <dl class="row mt-4">
+            <dt class="col-sm-4">İsim</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Isim)</dd>
+
+            <dt class="col-sm-4">Açıklama</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Aciklama)</dd>
+
+            <dt class="col-sm-4">Fiyat</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Fiyat)</dd>
+
+            <dt class="col-sm-4">Süre</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Sure)</dd>
+        </dl>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="Edit" asp-route-id="@Model?.IslemTuruId" class="btn btn-primary">Düzenle</a>
+        <a asp-action="Index" class="btn btn-outline-dark">Listeye Dön</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IslemTuruId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 50px auto;
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Playfair Display', serif;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 20px;
+    }
+
+    .details dl {
+        font-size: 16px;
+    }
+
+    .details dt {
+        font-weight: bold;
+        color: #333333;
+    }
+
+    .details dd {
+        color: #555555;
+    }
+
+    .btn-primary {
+        background-color: #333333;
+        color: #FFFFFF;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+        .btn-primary:hover {
+            background-color: #333333;
+        }
+
+    .btn-outline-dark {
+        border-color: #333333;
+        color: #333333;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #333333;
+            color: #FFFFFF;
+        }
+</style>

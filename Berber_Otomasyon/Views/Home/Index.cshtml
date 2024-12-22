@@ -1,11 +1,16 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Kullanıcının giriş durumuna göre yönlendirme URL'sini belirle
+    string randevuUrl = User.Identity.IsAuthenticated
+        ? Url.Action("Index", "Randevu") // Kullanıcı giriş yapmışsa Randevu sayfasına yönlendir
+        : Url.Page("/Account/Login", new { area = "Identity" }); // Giriş yapılmamışsa Login sayfasına yönlendir
 }
 
 <div class="hero">
     <h1>Hoş Geldiniz</h1>
     <p>Profesyonel hizmetlerimizle siz değerli müşterilerimizi bekliyoruz.</p>
-    <a href="Home/Appointment" class="btn btn-dark">Randevu Al</a>
+    <a href="@randevuUrl" class="btn btn-dark">Randevu Al</a>
 </div>
 
 <div class="services">
@@ -47,17 +52,17 @@
             margin: 10px 0 20px;
         }
 
-        .hero button {
+        .hero a {
             padding: 10px 20px;
             background-color: #333333;
             color: #FFFFFF;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
+            text-decoration: none;
             font-family: 'Playfair Display', serif;
         }
 
-            .hero button:hover {
+            .hero a:hover {
                 background-color: #555555;
             }
 
@@ -98,3 +103,4 @@
             margin: 0 10px 20px;
         }
 </style>
+

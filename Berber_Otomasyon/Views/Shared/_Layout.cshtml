@@ -48,12 +48,13 @@
     <!-- Bootstrap Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Erkek Kuaför</a>
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Erkek Kuaför</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+<<<<<<< Updated upstream
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="IslemTuru" asp-action="Index">İşlem Türleri</a>
                     </li>
@@ -66,14 +67,48 @@
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterM">Müşteri Olarak Kaydol</a>
+=======
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    {
+                        <!-- Admin için Görünecek Linkler -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="IslemTuru" asp-action="Index">İşlem Türleri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
+>>>>>>> Stashed changes
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>
                         </li>
                     }
+<<<<<<< Updated upstream
                 </ul>
 
                 <!-- Partial Kullanımı -->
+=======
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("calisan"))
+                    {
+                        <!-- Admin için Görünecek Linkler -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="IslemTuru" asp-action="Index">İşlem Türleri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
+                        </li>
+
+                    }
+                    else if (!User.Identity.IsAuthenticated)
+                    {
+                        <!-- Misafir Kullanıcı için Görünecek Linkler -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterM">Müşteri Olarak Kaydol</a>
+                        </li>
+                    }
+                </ul>
+
+                <!-- Kullanıcı Giriş Durumu için Partial -->
+>>>>>>> Stashed changes
                 <partial name="_LoginPartial" />
             </div>
         </div>
@@ -93,8 +128,5 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-    <!-- Bootstrap JS -->
 </body>
 </html>
-

@@ -24,8 +24,8 @@ namespace Berber_Otomasyon.Data
             base.OnModelCreating(modelBuilder);
 
             //CalisanRandevu tablosunda RandevuTarih alanı için veri tipi ayarlaması
-            modelBuilder.Entity<CalisanRandevu>()
-                .Property(cr => cr.RandevuTarih)
+            modelBuilder.Entity<MusteriRandevu>()
+                .Property(mr => mr.RandevuTarih)
                 .HasColumnType("date");
 
             //IslemTuru tablosunda Fiyat alanı için veri tipi ayarlaması
@@ -34,8 +34,8 @@ namespace Berber_Otomasyon.Data
                 .HasColumnType("decimal(18, 2)");
 
             //IslemSepeti tablosunda Fiyat alanı için veri tipi ayarlaması
-            modelBuilder.Entity<IslemSepeti>()
-                .Property(i => i.ToplamUcret)
+            modelBuilder.Entity<MusteriRandevu>()
+                .Property(mr => mr.ToplamUcret)
                 .HasColumnType("decimal(18, 2)");
 
             // CalisanRandevu için yapılandırma
@@ -66,8 +66,8 @@ namespace Berber_Otomasyon.Data
 
             modelBuilder.Entity<MusteriRandevu>()
                 .HasOne(mr => mr.CalisanRandevu)
-                .WithOne(cr => cr.MusteriRandevu)
-                .HasForeignKey<MusteriRandevu>(mr => mr.CalisanRandevuId)
+                .WithMany(cr => cr.MusteriRandevular)
+                .HasForeignKey(mr => mr.CalisanRandevuId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             // CalisanIslem için yapılandırma

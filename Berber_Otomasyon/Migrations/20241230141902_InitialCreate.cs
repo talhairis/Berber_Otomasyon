@@ -32,7 +32,6 @@ namespace Berber_Otomasyon.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     KullaniciAdi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     KullaniciSoyadi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     CalisanUnvan = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -52,6 +51,22 @@ namespace Berber_Otomasyon.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IslemTurleri",
+                columns: table => new
+                {
+                    IslemTuruId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Isim = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Aciklama = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Fiyat = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Sure = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IslemTurleri", x => x.IslemTuruId);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,12 +190,35 @@ namespace Berber_Otomasyon.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CalisanIslemler",
+                columns: table => new
+                {
+                    CalisanIslemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CalisanId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IslemTuruId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CalisanIslemler", x => x.CalisanIslemId);
+                    table.ForeignKey(
+                        name: "FK_CalisanIslemler_AspNetUsers_CalisanId",
+                        column: x => x.CalisanId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CalisanIslemler_IslemTurleri_IslemTuruId",
+                        column: x => x.IslemTuruId,
+                        principalTable: "IslemTurleri",
+                        principalColumn: "IslemTuruId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CalisanRandevular",
                 columns: table => new
                 {
                     CalisanRandevuId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OnayliRandevu = table.Column<bool>(type: "bit", nullable: false),
                     CalisanId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RandevuId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -205,6 +243,10 @@ namespace Berber_Otomasyon.Migrations
                 {
                     MusteriRandevuId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    RandevuTarih = table.Column<DateOnly>(type: "date", nullable: false),
+                    OnayliRandevu = table.Column<bool>(type: "bit", nullable: false),
+                    ToplamUcret = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ToplamSure = table.Column<int>(type: "int", nullable: false),
                     MusteriId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CalisanRandevuId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -221,6 +263,30 @@ namespace Berber_Otomasyon.Migrations
                         column: x => x.CalisanRandevuId,
                         principalTable: "CalisanRandevular",
                         principalColumn: "CalisanRandevuId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IslemSepetleri",
+                columns: table => new
+                {
+                    IslemSepetiId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IslemTuruId = table.Column<int>(type: "int", nullable: false),
+                    MusteriRandevuId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IslemSepetleri", x => x.IslemSepetiId);
+                    table.ForeignKey(
+                        name: "FK_IslemSepetleri_IslemTurleri_IslemTuruId",
+                        column: x => x.IslemTuruId,
+                        principalTable: "IslemTurleri",
+                        principalColumn: "IslemTuruId");
+                    table.ForeignKey(
+                        name: "FK_IslemSepetleri_MusteriRandevular_MusteriRandevuId",
+                        column: x => x.MusteriRandevuId,
+                        principalTable: "MusteriRandevular",
+                        principalColumn: "MusteriRandevuId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -263,6 +329,16 @@ namespace Berber_Otomasyon.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CalisanIslemler_CalisanId",
+                table: "CalisanIslemler",
+                column: "CalisanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CalisanIslemler_IslemTuruId",
+                table: "CalisanIslemler",
+                column: "IslemTuruId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CalisanRandevular_CalisanId",
                 table: "CalisanRandevular",
                 column: "CalisanId");
@@ -273,10 +349,19 @@ namespace Berber_Otomasyon.Migrations
                 column: "RandevuId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IslemSepetleri_IslemTuruId",
+                table: "IslemSepetleri",
+                column: "IslemTuruId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IslemSepetleri_MusteriRandevuId",
+                table: "IslemSepetleri",
+                column: "MusteriRandevuId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MusteriRandevular_CalisanRandevuId",
                 table: "MusteriRandevular",
-                column: "CalisanRandevuId",
-                unique: true);
+                column: "CalisanRandevuId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MusteriRandevular_MusteriId",
@@ -303,10 +388,19 @@ namespace Berber_Otomasyon.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "MusteriRandevular");
+                name: "CalisanIslemler");
+
+            migrationBuilder.DropTable(
+                name: "IslemSepetleri");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "IslemTurleri");
+
+            migrationBuilder.DropTable(
+                name: "MusteriRandevular");
 
             migrationBuilder.DropTable(
                 name: "CalisanRandevular");

@@ -1,53 +1,95 @@
 ﻿@model IEnumerable<Berber_Otomasyon.Models.IslemTuru>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "İşlem Türleri";
 }
 
-<h1>Index</h1>
+<div class="index-container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Isim)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Aciklama)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fiyat)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sure)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Isim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Aciklama)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fiyat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sure)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IslemTuruId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IslemTuruId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IslemTuruId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="text-center mb-3">
+        <a asp-action="Create" class="btn btn-dark">Yeni İşlem Türü Ekle</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>İsim</th>
+                <th>Açıklama</th>
+                <th>Fiyat</th>
+                <th>Süre</th>
+                <th class="text-center">Aksiyonlar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Isim)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Aciklama)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Fiyat)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Sure)</td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.IslemTuruId" class="btn btn-outline-dark btn-sm">Düzenle</a>
+                        <a asp-action="Details" asp-route-id="@item.IslemTuruId" class="btn btn-outline-dark btn-sm">Detaylar</a>
+                        <a asp-action="Delete" asp-route-id="@item.IslemTuruId" class="btn btn-dark btn-sm">Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .index-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Playfair Display', serif;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f2f2f2;
+    }
+
+    .btn-dark {
+        background-color: #333333;
+        color: #FFFFFF;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+        .btn-dark:hover {
+            background-color: #555555;
+        }
+
+    .btn-outline-dark {
+        border-color: #333333;
+        color: #333333;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #333333;
+            color: #FFFFFF;
+        }
+</style>

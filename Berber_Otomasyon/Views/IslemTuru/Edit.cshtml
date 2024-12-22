@@ -1,49 +1,121 @@
 ﻿@model Berber_Otomasyon.Models.IslemTuru
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "İşlem Türü Düzenle";
 }
 
-<h1>Edit</h1>
+<div class="edit-container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Edit" class="p-4 shadow rounded">
+                <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3"></div>
+                <input type="hidden" asp-for="IslemTuruId" />
 
-<h4>IslemTuru</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IslemTuruId" />
-            <div class="form-group">
-                <label asp-for="Isim" class="control-label"></label>
-                <input asp-for="Isim" class="form-control" />
-                <span asp-validation-for="Isim" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Aciklama" class="control-label"></label>
-                <input asp-for="Aciklama" class="form-control" />
-                <span asp-validation-for="Aciklama" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Fiyat" class="control-label"></label>
-                <input asp-for="Fiyat" class="form-control" />
-                <span asp-validation-for="Fiyat" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sure" class="control-label"></label>
-                <input asp-for="Sure" class="form-control" />
-                <span asp-validation-for="Sure" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- İşlem İsmi -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Isim" class="form-control" placeholder="İşlem Türünün İsmi" />
+                    <label asp-for="Isim">İşlem Türünün İsmi</label>
+                    <span asp-validation-for="Isim" class="text-danger"></span>
+                </div>
+
+                <!-- Açıklama -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Aciklama" class="form-control" placeholder="Açıklama" />
+                    <label asp-for="Aciklama">Açıklama</label>
+                    <span asp-validation-for="Aciklama" class="text-danger"></span>
+                </div>
+
+                <!-- Fiyat -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Fiyat" class="form-control" placeholder="Fiyat" />
+                    <label asp-for="Fiyat">Fiyat</label>
+                    <span asp-validation-for="Fiyat" class="text-danger"></span>
+                </div>
+
+                <!-- Süre -->
+                <div class="form-floating mb-3">
+                    <input asp-for="Sure" class="form-control" placeholder="Süre" />
+                    <label asp-for="Sure">Süre (dakika)</label>
+                    <span asp-validation-for="Sure" class="text-danger"></span>
+                </div>
+
+                <!-- Kaydet Butonu -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-outline-dark">Listeye Dön</a>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    .edit-container {
+        max-width: 800px;
+        margin: 50px auto;
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Playfair Display', serif;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 20px;
+    }
+
+    .form-floating label {
+        color: #555555;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #CCCCCC;
+    }
+
+        .form-control:focus {
+            border-color: #333333;
+            box-shadow: 0 0 5px rgba(51, 51, 51, 0.5);
+        }
+
+    .btn-dark {
+        background-color: #333333;
+        color: #FFFFFF;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+        .btn-dark:hover {
+            background-color: #555555;
+        }
+
+    .btn-outline-dark {
+        border-color: #333333;
+        color: #333333;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #333333;
+            color: #FFFFFF;
+        }
+</style>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

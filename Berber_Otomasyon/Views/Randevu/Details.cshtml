@@ -1,30 +1,88 @@
 ﻿@model Berber_Otomasyon.Models.Randevu
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Randevu Detayları";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Randevu</h4>
+<div class="details-container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BaslangicSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BaslangicSaati)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BitisSaati)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BitisSaati)
-        </dd>
-    </dl>
+    <div class="details">
+        <dl class="row mt-4">
+            <dt class="col-sm-4">Başlangıç Saati</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.BaslangicSaati)</dd>
+
+            <dt class="col-sm-4">Bitiş Saati</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.BitisSaati)</dd>
+        </dl>
+    </div>
+
+    <div class="text-center mt-4">
+        <a asp-action="Edit" asp-route-id="@Model?.RandevuId" class="btn btn-primary">Düzenle</a>
+        <a asp-action="Index" class="btn btn-outline-dark">Listeye Dön</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.RandevuId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 50px auto;
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Playfair Display', serif;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 20px;
+    }
+
+    .details dl {
+        font-size: 16px;
+    }
+
+    .details dt {
+        font-weight: bold;
+        color: #333333;
+    }
+
+    .details dd {
+        color: #555555;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #FFFFFF;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-outline-dark {
+        border-color: #333333;
+        color: #333333;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #333333;
+            color: #FFFFFF;
+        }
+</style>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

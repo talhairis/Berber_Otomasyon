@@ -58,14 +58,8 @@ namespace Berber_Otomasyon.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("OnayliRandevu")
-                        .HasColumnType("bit");
-
                     b.Property<int>("RandevuId")
                         .HasColumnType("int");
-
-                    b.Property<DateOnly>("RandevuTarih")
-                        .HasColumnType("date");
 
                     b.HasKey("CalisanRandevuId");
 
@@ -89,12 +83,6 @@ namespace Berber_Otomasyon.Migrations
 
                     b.Property<int>("MusteriRandevuId")
                         .HasColumnType("int");
-
-                    b.Property<int>("ToplamSure")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ToplamUcret")
-                        .HasColumnType("decimal(18, 2)");
 
                     b.HasKey("IslemSepetiId");
 
@@ -227,10 +215,21 @@ namespace Berber_Otomasyon.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("OnayliRandevu")
+                        .HasColumnType("bit");
+
+                    b.Property<DateOnly>("RandevuTarih")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ToplamSure")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ToplamUcret")
+                        .HasColumnType("decimal(18, 2)");
+
                     b.HasKey("MusteriRandevuId");
 
-                    b.HasIndex("CalisanRandevuId")
-                        .IsUnique();
+                    b.HasIndex("CalisanRandevuId");
 
                     b.HasIndex("MusteriId");
 
@@ -449,8 +448,8 @@ namespace Berber_Otomasyon.Migrations
             modelBuilder.Entity("Berber_Otomasyon.Models.MusteriRandevu", b =>
                 {
                     b.HasOne("Berber_Otomasyon.Models.CalisanRandevu", "CalisanRandevu")
-                        .WithOne("MusteriRandevu")
-                        .HasForeignKey("Berber_Otomasyon.Models.MusteriRandevu", "CalisanRandevuId")
+                        .WithMany("MusteriRandevular")
+                        .HasForeignKey("CalisanRandevuId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -518,8 +517,7 @@ namespace Berber_Otomasyon.Migrations
 
             modelBuilder.Entity("Berber_Otomasyon.Models.CalisanRandevu", b =>
                 {
-                    b.Navigation("MusteriRandevu")
-                        .IsRequired();
+                    b.Navigation("MusteriRandevular");
                 });
 
             modelBuilder.Entity("Berber_Otomasyon.Models.IslemTuru", b =>
