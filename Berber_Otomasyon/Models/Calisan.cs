@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace Berber_Otomasyon.Models
 {
@@ -10,5 +11,7 @@ namespace Berber_Otomasyon.Models
 		[Required(ErrorMessage = "Lütfen çalışan unvanını giriniz!")]
         public string calisanUnvan;
 
-	}
+        public ICollection<CalisanRandevu>? calisanRandevular { get; set; }
+
+    }
 }
