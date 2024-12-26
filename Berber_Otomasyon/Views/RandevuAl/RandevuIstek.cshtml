@@ -1,0 +1,137 @@
+﻿@model Berber_Otomasyon.Models.ViewModels.RandevuAlModel
+
+@{
+    ViewData["Title"] = "Randevu Seçimi";
+}
+
+<div class="container">
+    <h1 class="text-center mb-4">Randevu Seçimi</h1>
+    <h3>Randevu Tarihi: @Model.RandevuTarih.ToString("dd MMMM yyyy")</h3>
+    <h4>Toplam Ücret: @Model.ToplamUcret.ToString("C")</h4>
+    <h4>Toplam Süre: @Model.ToplamSure dakika</h4>
+
+    <h3>Seçilen İşlem Türleri</h3>
+    <ul>
+        @foreach (var islem in Model.IslemTurleri)
+        {
+            <li>@islem.Isim - @islem.Fiyat.ToString("C") (@islem.Sure dakika)</li>
+        }
+    </ul>
+
+    <h3>Uygun Çalışanlar ve Randevu Saatleri</h3>
+    @foreach (var calisan in Model.Calisanlar)
+    {
+        <div class="mb-4">
+            <h5>@calisan.KullaniciAdi @calisan.KullaniciSoyadi</h5>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (var randevuViewModel in Model.CalisanRandevularViewModeller.Where(vm => vm.calisanRandevu.CalisanId == calisan.Id))
+                {
+                    var totalSlots = (int)Math.Ceiling((double)Model.ToplamSure / 60);
+                    for (int i = 0; i < totalSlots; i++)
+                    {
+                        var startTime = randevuViewModel.randevu.BaslangicSaati.Add(TimeSpan.FromMinutes(i * 60));
+                        var endTime = startTime.Add(TimeSpan.FromMinutes(60));
+
+                        if (endTime <= randevuViewModel.randevu.BitisSaati)
+                        {
+                            <button type="button"
+                                    class="btn btn-outline-dark btn-sm randevu-btn"
+                                    data-start="@startTime"
+                                    data-end="@endTime">
+                                @startTime.ToString("hh\\:mm") - @endTime.ToString("hh\\:mm")
+                            </button>
+                        }
+                    }
+                }
+            </div>
+        </div>
+    }
+
+    <form asp-action="RandevuIstek" method="post">
+        <input type="hidden" asp-for="RandevuTarih" />
+        <input type="hidden" asp-for="ToplamUcret" />
+        <input type="hidden" asp-for="ToplamSure" />
+        <input type="hidden" id="selected-randevular" name="SelectedRandevular" value="" />
+
+        <div class="text-center mt-4">
+            <p id="error-message" class="text-danger d-none">Maksimum seçim hakkını aştınız.</p>
+            <button type="submit" class="btn btn-dark" disabled id="submit-button">Randevuyu Tamamla</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const maxSelections = @Model.SecimSayisi;
+        const selectedRandevular = new Set();
+        const submitButton = document.getElementById("submit-button");
+        const hiddenInput = document.getElementById("selected-randevular");
+        const errorMessage = document.getElementById("error-message");
+
+        document.querySelectorAll(".randevu-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const randevuId = `${this.dataset.start}-${this.dataset.end}`;
+
+                if (selectedRandevular.has(randevuId)) {
+                    selectedRandevular.delete(randevuId);
+                    this.classList.remove("btn-dark");
+                    this.classList.add("btn-outline-dark");
+                } else if (selectedRandevular.size < maxSelections) {
+                    selectedRandevular.add(randevuId);
+                    this.classList.remove("btn-outline-dark");
+                    this.classList.add("btn-dark");
+                } else {
+                    errorMessage.classList.remove("d-none");
+                    setTimeout(() => {
+                        errorMessage.classList.add("d-none");
+                    }, 3000); // 3 saniye sonra hata mesajını gizle
+                    return;
+                }
+
+                hiddenInput.value = Array.from(selectedRandevular).join(",");
+                submitButton.disabled = selectedRandevular.size !== maxSelections;
+            });
+        });
+    });
+</script>
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Playfair Display', serif;
+    }
+
+    h1, h3, h4 {
+        color: #333333;
+    }
+
+    .btn-outline-dark {
+        border-color: #333333;
+        color: #333333;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #333333;
+            color: #FFFFFF;
+        }
+
+    .btn-dark {
+        background-color: #333333;
+        color: #FFFFFF;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+        .btn-dark:hover {
+            background-color: #555555;
+        }
+</style>

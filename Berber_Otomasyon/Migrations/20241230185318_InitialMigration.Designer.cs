@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Berber_Otomasyon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241230141902_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241230185318_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

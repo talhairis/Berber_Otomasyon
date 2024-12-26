@@ -30,8 +30,5 @@ namespace Berber_Otomasyon.Models
         public ICollection<CalisanIslem>? CalisanIslemler { get; set; }
 
         public ICollection<IslemSepeti>? IslemSepetleri { get; set; }
-
-        [NotMapped] // Veritabanına kaydedilmeyecek
-        public bool IsSelected { get; set; }
     }
 }

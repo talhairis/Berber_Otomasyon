@@ -1,0 +1,30 @@
+﻿@model Berber_Otomasyon.Models.ViewModels.RandevuKisitModel
+
+@{
+    ViewData["Title"] = "Randevu Kısıt";
+}
+
+<div class="container">
+    <h1 class="text-center mb-4">Randevu Kısıt</h1>
+    <form asp-action="RandevuKisit" method="post">
+        <div class="form-group mb-3">
+            <label for="RandevuTarih">Randevu Tarihi</label>
+            <input type="date" id="RandevuTarih" asp-for="RandevuTarih" class="form-control" />
+            <span asp-validation-for="RandevuTarih" class="text-danger"></span>
+        </div>
+
+        <h3>İşlem Türleri</h3>
+        @foreach (var islem in Model.IslemTurleri)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="SelectedIslemTurleri" value="@islem.IslemTuruId" />
+                <label class="form-check-label">@islem.Isim - @islem.Fiyat.ToString("C") (@islem.Sure dakika)</label>
+            </div>
+        }
+
+        <button type="submit" class="btn btn-dark mt-3">Randevuları Göster</button>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

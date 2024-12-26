@@ -21,8 +21,5 @@ namespace Berber_Otomasyon.Models
 
         public ICollection<CalisanRandevu>? CalisanRandevular { get; set; }
 
-        [NotMapped] // Veritabanına kaydedilmeyecek
-        public bool IsSelected { get; set; }
-
     }
 }

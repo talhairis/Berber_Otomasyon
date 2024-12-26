@@ -3,6 +3,7 @@ using Berber_Otomasyon.Models;
 using Berber_Otomasyon.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Berber_Otomasyon.Controllers
 {
@@ -21,7 +22,8 @@ namespace Berber_Otomasyon.Controllers
 
             return View(randevuKisitModel);
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RandevuKisit(RandevuKisitModel randevuKisitModel)
         {
             if(randevuKisitModel == null)
@@ -29,25 +31,32 @@ namespace Berber_Otomasyon.Controllers
                 return RedirectToAction(nameof(RandevuKisit));
             }
 
-            var islemTuruIdList = randevuKisitModel.IslemTurleri.Select(it => it.IslemTuruId).ToList();
+            var islemTuruIdList = randevuKisitModel.SelectedIslemTurleri.ToList();
+
+            // islemTuruIdList'teki ID'lere göre IslemTurleri tablosunu filtrele
+            List<IslemTuru> islemTurleriListesi = _applicationDbContext.IslemTurleri
+                .Where(islem => islemTuruIdList.Contains(islem.IslemTuruId))
+                .ToList();
+
+            // ToplamSure hesaplama
+            int toplamSure = islemTurleriListesi.Sum(islem => islem.Sure);
+
+            // ToplamUcret hesaplama
+            decimal toplamUcret = islemTurleriListesi.Sum(islem => islem.Fiyat);
 
             var calisanlar = _applicationDbContext.CalisanIslemler
+                .GroupBy(ci => ci.CalisanId) // Çalışanlara göre gruplandır
+                .Where(group => islemTuruIdList.All(islemId => group.Select(ci => ci.IslemTuruId).Contains(islemId))) // Tüm işlem türlerini kontrol et
+                .Select(group => group.Key) // ÇalışanId'yi seç
+                .Distinct() // Tekrarlayanları kaldır
                 .Join(
-                    _applicationDbContext.IslemTurleri, // İkinci tablo
-                    calisanIslem => calisanIslem.IslemTuruId, // Birleştirme koşulu
-                    islemTuru => islemTuru.IslemTuruId,
-                    (calisanIslem, islemTuru) => new { calisanIslem.CalisanId, islemTuru.IslemTuruId } // Sonuç
-                )
-                .Where(x => islemTuruIdList.Contains(x.IslemTuruId)) // Verilen işlem türü ID'lerine göre filtrele
-                .Select(x => x.CalisanId) // Yalnızca CalisanId alanını seç
-                .Distinct() // Tekrarlayan CalisanId'leri kaldır
-                .Join(
-                    _applicationDbContext.Kullanicilar, // Calisan tablosunu birleştir
-                    calisanId => calisanId, // CalisanId eşleştirme koşulu
+                    _applicationDbContext.Kullanicilar, // Çalışanları kullanıcı tablosu ile birleştir
+                    calisanId => calisanId, // ÇalışanId'yi eşleştir
                     calisan => calisan.Id,
-                    (calisanId, calisan) => calisan // Sonuç olarak Calisan nesnesi
+                    (calisanId, calisan) => calisan // Kullanıcı nesnelerini döndür
                 )
                 .ToList();
+
 
             var calisanRandevular = calisanlar
                 .Join(
@@ -75,24 +84,68 @@ namespace Berber_Otomasyon.Controllers
                 .Where(calisanRandevu => !eslesenRandevular.Contains(calisanRandevu)) // Eşleşenleri hariç tut
                 .ToList();
 
+            // Sorguyu oluştur
+            var joinedRandevular = filtrelenmisCalisanRandevular
+                .Join(
+                    _applicationDbContext.Randevular, // Randevular tablosu
+                    calisanRandevu => calisanRandevu.RandevuId, // Birleştirme koşulu (CalisanRandevu'daki RandevuId)
+                    randevu => randevu.RandevuId, // Randevular tablosundaki RandevuId
+                    (calisanRandevu, randevu) => new // Sonuç
+                    {
+                        CalisanRandevu = calisanRandevu,
+                        Randevu = randevu
+                    }
+                )
+                .ToList();
+
+            int secimSayisi = (toplamSure / 60) + 1;
+
+            // Listeyi CalisanRandevularViewModel türüne dönüştür
+            List<CalisanRandevularViewModel> joinedRandevularTurn = joinedRandevular
+                .Select(j => new CalisanRandevularViewModel
+                {
+                    calisanRandevu = j.CalisanRandevu,
+                    randevu = j.Randevu
+                })
+                .ToList();
+
             RandevuAlModel randevuAlModel = new RandevuAlModel
             {
-                ToplamUcret = randevuKisitModel.ToplamUcret,
-                ToplamSure = randevuKisitModel.ToplamSure,
-                IslemTurleri = randevuKisitModel.IslemTurleri,
+                SecimSayisi = secimSayisi,
+                ToplamUcret = toplamUcret,
+                ToplamSure = toplamSure,
+                IslemTurleri = islemTurleriListesi,
                 RandevuTarih = randevuKisitModel.RandevuTarih,
                 Calisanlar = calisanlar,
-                CalisanRandevular = filtrelenmisCalisanRandevular
+                CalisanRandevularViewModeller = joinedRandevularTurn
             };
 
-            return RedirectToAction(nameof(RandevuIstek), new { model = randevuAlModel });
+            TempData["RandevuAlModel"] = System.Text.Json.JsonSerializer.Serialize(randevuAlModel, new JsonSerializerOptions
+            {
+                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve,
+                WriteIndented = true // Gerekirse düzenli yazım için
+            });
+
+            return RedirectToAction(nameof(RandevuIstek));
         }
 
-        public IActionResult RandevuIstek(RandevuAlModel randevuAlModel)
+        public IActionResult RandevuIstek()
         {
-            return View(randevuAlModel);
-        }
+            if (TempData["RandevuAlModel"] is string randevuAlModelJson)
+            {
+                var randevuAlModel = System.Text.Json.JsonSerializer.Deserialize<RandevuAlModel>(randevuAlModelJson, new JsonSerializerOptions
+                {
+                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                });
+                if(!(randevuAlModel.ToplamSure > 0)) return RedirectToAction(nameof(RandevuKisit));
+                return View(randevuAlModel);
+            }
 
+
+            return RedirectToAction(nameof(RandevuKisit));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RandevuIstek(RandevuBitirModel randevuBitirModel)
         {
             var FoundMusteriId = User.FindFirstValue(ClaimTypes.NameIdentifier);

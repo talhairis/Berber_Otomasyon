@@ -4,6 +4,7 @@ namespace Berber_Otomasyon.Models.ViewModels
 {
     public class RandevuAlModel
     {
+        public int SecimSayisi { get; set; }
 
         [Display(Name = "Toplam Ücret")]
         public decimal ToplamUcret { get; set; }
@@ -19,6 +20,6 @@ namespace Berber_Otomasyon.Models.ViewModels
 
         public ICollection<Kullanici> Calisanlar { get; set; }
 
-        public ICollection<CalisanRandevu> CalisanRandevular { get; set; }
+        public ICollection<CalisanRandevularViewModel> CalisanRandevularViewModeller { get; set; }
     }
 }

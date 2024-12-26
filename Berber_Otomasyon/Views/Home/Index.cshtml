@@ -3,7 +3,7 @@
 
     // Kullanıcının giriş durumuna göre yönlendirme URL'sini belirle
     string randevuUrl = User.Identity.IsAuthenticated
-        ? Url.Action("Index", "Randevu") // Kullanıcı giriş yapmışsa Randevu sayfasına yönlendir
+        ? Url.Action("RandevuKisit", "RandevuAl") // Kullanıcı giriş yapmışsa Randevu sayfasına yönlendir
         : Url.Page("/Account/Login", new { area = "Identity" }); // Giriş yapılmamışsa Login sayfasına yönlendir
 }
 
