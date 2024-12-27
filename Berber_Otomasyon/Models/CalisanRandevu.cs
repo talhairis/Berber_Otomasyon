@@ -6,13 +6,18 @@ namespace Berber_Otomasyon.Models
     {
 
         [Key]
-        public int calisanRandevuId;
+        public int CalisanRandevuId { get; set; }
 
-        public int calisanId { get; set; }
-        public Calisan calisan { get; set; }
+        [Display(Name = "Randevu Onayı")]
+        public bool OnayliRandevu { get; set; } = false;
 
-        public int randevuId { get; set; }
-        public Randevu randevu { get; set; }
+        public string CalisanId { get; set; }
+        public Calisan Calisan { get; set; }
+
+        public int RandevuId { get; set; }
+        public Randevu Randevu { get; set; }
+
+        public MusteriRandevu MusteriRandevu { get; set; }
 
     }
 }

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Berber_Otomasyon.Data.Migrations
+namespace Berber_Otomasyon.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241224182834_InitialIdentitySetup")]
-    partial class InitialIdentitySetup
+    [Migration("20241226232552_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,33 @@ namespace Berber_Otomasyon.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.CalisanRandevu", b =>
+                {
+                    b.Property<int>("CalisanRandevuId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CalisanRandevuId"));
+
+                    b.Property<string>("CalisanId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("OnayliRandevu")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RandevuId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CalisanRandevuId");
+
+                    b.HasIndex("CalisanId");
+
+                    b.HasIndex("RandevuId");
+
+                    b.ToTable("CalisanRandevular");
+                });
 
             modelBuilder.Entity("Berber_Otomasyon.Models.Kullanici", b =>
                 {
@@ -107,6 +134,50 @@ namespace Berber_Otomasyon.Data.Migrations
                     b.HasDiscriminator().HasValue("Kullanici");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.MusteriRandevu", b =>
+                {
+                    b.Property<int>("MusteriRandevuId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MusteriRandevuId"));
+
+                    b.Property<int>("CalisanRandevuId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MusteriId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MusteriRandevuId");
+
+                    b.HasIndex("CalisanRandevuId")
+                        .IsUnique();
+
+                    b.HasIndex("MusteriId");
+
+                    b.ToTable("MusteriRandevular");
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.Randevu", b =>
+                {
+                    b.Property<int>("RandevuId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RandevuId"));
+
+                    b.Property<TimeSpan>("BaslangicSaati")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("BitisSaati")
+                        .HasColumnType("time");
+
+                    b.HasKey("RandevuId");
+
+                    b.ToTable("Randevular");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -246,6 +317,10 @@ namespace Berber_Otomasyon.Data.Migrations
                 {
                     b.HasBaseType("Berber_Otomasyon.Models.Kullanici");
 
+                    b.Property<string>("CalisanUnvan")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasDiscriminator().HasValue("Calisan");
                 });
 
@@ -254,6 +329,44 @@ namespace Berber_Otomasyon.Data.Migrations
                     b.HasBaseType("Berber_Otomasyon.Models.Kullanici");
 
                     b.HasDiscriminator().HasValue("Musteri");
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.CalisanRandevu", b =>
+                {
+                    b.HasOne("Berber_Otomasyon.Models.Calisan", "Calisan")
+                        .WithMany("CalisanRandevular")
+                        .HasForeignKey("CalisanId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Berber_Otomasyon.Models.Randevu", "Randevu")
+                        .WithMany("CalisanRandevular")
+                        .HasForeignKey("RandevuId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Calisan");
+
+                    b.Navigation("Randevu");
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.MusteriRandevu", b =>
+                {
+                    b.HasOne("Berber_Otomasyon.Models.CalisanRandevu", "CalisanRandevu")
+                        .WithOne("MusteriRandevu")
+                        .HasForeignKey("Berber_Otomasyon.Models.MusteriRandevu", "CalisanRandevuId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Berber_Otomasyon.Models.Musteri", "Musteri")
+                        .WithMany("MusteriRandevular")
+                        .HasForeignKey("MusteriId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("CalisanRandevu");
+
+                    b.Navigation("Musteri");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -305,6 +418,27 @@ namespace Berber_Otomasyon.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.CalisanRandevu", b =>
+                {
+                    b.Navigation("MusteriRandevu")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.Randevu", b =>
+                {
+                    b.Navigation("CalisanRandevular");
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.Calisan", b =>
+                {
+                    b.Navigation("CalisanRandevular");
+                });
+
+            modelBuilder.Entity("Berber_Otomasyon.Models.Musteri", b =>
+                {
+                    b.Navigation("MusteriRandevular");
                 });
 #pragma warning restore 612, 618
         }

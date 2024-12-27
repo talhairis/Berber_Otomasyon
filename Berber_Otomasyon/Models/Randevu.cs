@@ -6,7 +6,7 @@ namespace Berber_Otomasyon.Models
     {
 
         [Key]
-        public int randevuId;
+        public int RandevuId { get; set; }
 
         [Display(Name = "Randevu Başlangıç Saati")]
         [Required(ErrorMessage = "Lütfen randevu başlangıç saatini giriniz!")]
@@ -16,7 +16,7 @@ namespace Berber_Otomasyon.Models
         [Required(ErrorMessage = "Lütfen randevu bitiş saatini giriniz!")]
         public TimeSpan BitisSaati { get; set; }
 
-        public ICollection<CalisanRandevu>? calisanRandevular { get; set; }
+        public ICollection<CalisanRandevu>? CalisanRandevular { get; set; }
 
     }
 }

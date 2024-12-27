@@ -6,13 +6,15 @@ namespace Berber_Otomasyon.Models
     {
 
         [Key]
-        public int musteriRandevuId;
+        public int MusteriRandevuId { get; set; }
 
-        public int musteriId { get; set; }
-        public Musteri musteri { get; set; }
+        public string MusteriId { get; set; }
+        public Musteri Musteri { get; set; }
 
-        public int calisanRandevuId { get; set; }
-        public CalisanRandevu calisanRandevu { get; set; }
+        public int CalisanRandevuId { get; set; }
+        public CalisanRandevu CalisanRandevu { get; set; }
+
+        public ICollection<IslemSepeti>? IslemSepetleri { get; set; }
 
     }
 }

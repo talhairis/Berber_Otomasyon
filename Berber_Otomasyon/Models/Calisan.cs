@@ -9,9 +9,11 @@ namespace Berber_Otomasyon.Models
 
 		[Display(Name = "Çalışan Unvanı")]
 		[Required(ErrorMessage = "Lütfen çalışan unvanını giriniz!")]
-        public string calisanUnvan;
+        public string CalisanUnvan { get; set; }
 
-        public ICollection<CalisanRandevu>? calisanRandevular { get; set; }
+        public ICollection<CalisanRandevu>? CalisanRandevular { get; set; }
+
+        public ICollection<CalisanIslem>? CalisanIslemler { get; set; }
 
     }
 }
