@@ -1,0 +1,61 @@
+﻿@model List<Berber_Otomasyon.Models.ViewModels.MusteriOnayliViewModel>
+
+@{
+    ViewData["Title"] = "Onaylı Randevular";
+}
+
+<div class="container">
+    <h1 class="text-center mb-4">Onaylı Randevular</h1>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="list-group">
+            @foreach (var randevu in Model)
+            {
+                <div class="list-group-item mb-3 p-3 border rounded">
+                    <h4 class="mb-2">@randevu.RandevuTarih.ToString("dd MMMM yyyy")</h4>
+                    <p><strong>Çalışan:</strong> @randevu.CalisanAdi @randevu.CalisanSoyadi</p>
+                    <p><strong>Saat:</strong> @randevu.BaslangicSaati.ToString("hh\\:mm") - @randevu.BitisSaati.ToString("hh\\:mm")</p>
+                    <p><strong>Toplam Süre:</strong> @randevu.ToplamSure dakika</p>
+                    <p><strong>Toplam Ücret:</strong> @randevu.ToplamUcret.ToString("C")</p>
+                    <p><strong>İşlemler:</strong></p>
+                    <ul>
+                        @foreach (var islem in randevu.IslemSepetleri)
+                        {
+                            <li>İşlem ID: @islem.IslemTuruId</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-danger">Onaylı randevunuz bulunmamaktadır.</p>
+    }
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+    }
+
+    .list-group-item {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+    }
+
+        .list-group-item h4 {
+            color: #333;
+        }
+
+        .list-group-item p {
+            margin: 5px 0;
+        }
+</style>

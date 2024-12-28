@@ -80,11 +80,14 @@
                             <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>
                         </li>
                     }
-                    else if (!User.Identity.IsAuthenticated)
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("musteri"))
                     {
                         <!-- Misafir Kullanıcı için Görünecek Linkler -->
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterM">Müşteri Olarak Kaydol</a>
+                            <a class="nav-link" asp-area="" asp-controller="Musteri" asp-action="OnayliRandevular">Onaylı Randevular</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Musteri" asp-action="OnaysizRandevular">Onaysız Randevular</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>

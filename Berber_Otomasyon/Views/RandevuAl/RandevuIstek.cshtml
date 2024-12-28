@@ -35,6 +35,7 @@
                         if (endTime <= randevuViewModel.randevu.BitisSaati)
                         {
                             <button type="button"
+                                    data-calisan-randevu-id="@randevuViewModel.calisanRandevu.CalisanRandevuId"
                                     class="btn btn-outline-dark btn-sm randevu-btn"
                                     data-start="@startTime"
                                     data-end="@endTime">
@@ -48,10 +49,18 @@
     }
 
     <form asp-action="RandevuIstek" method="post">
-        <input type="hidden" asp-for="RandevuTarih" />
-        <input type="hidden" asp-for="ToplamUcret" />
-        <input type="hidden" asp-for="ToplamSure" />
-        <input type="hidden" id="selected-randevular" name="SelectedRandevular" value="" />
+        <input type="hidden" asp-for="RandevuBitirModel.RandevuTarih" value="@Model.RandevuTarih" />
+        <input type="hidden" asp-for="RandevuBitirModel.ToplamUcret" value="@Model.ToplamUcret" />
+        <input type="hidden" asp-for="RandevuBitirModel.ToplamSure" value="@Model.ToplamSure" />
+        <div id="selected-randevular-container"></div>
+
+        <div id="selected-islemler-container">
+            @for (int i = 0; i < Model.IslemTurleri.Count; i++)
+            {
+                <input type="hidden" name="RandevuBitirModel.IslemTurleri[@i].IslemTuruId"
+                       value="@Model.IslemTurleri[i].IslemTuruId" />
+            }
+        </div>
 
         <div class="text-center mt-4">
             <p id="error-message" class="text-danger d-none">Maksimum seçim hakkını aştınız.</p>
@@ -63,37 +72,45 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const maxSelections = @Model.SecimSayisi;
-        const selectedRandevular = new Set();
+        const selectedRandevular = [];
+        const container = document.getElementById("selected-randevular-container");
         const submitButton = document.getElementById("submit-button");
-        const hiddenInput = document.getElementById("selected-randevular");
         const errorMessage = document.getElementById("error-message");
 
         document.querySelectorAll(".randevu-btn").forEach(button => {
             button.addEventListener("click", function () {
-                const randevuId = `${this.dataset.start}-${this.dataset.end}`;
+                const calisanRandevuId = this.dataset.calisanRandevuId;
 
-                if (selectedRandevular.has(randevuId)) {
-                    selectedRandevular.delete(randevuId);
+                const index = selectedRandevular.indexOf(calisanRandevuId);
+
+                if (index !== -1) {
+                    selectedRandevular.splice(index, 1);
                     this.classList.remove("btn-dark");
                     this.classList.add("btn-outline-dark");
-                } else if (selectedRandevular.size < maxSelections) {
-                    selectedRandevular.add(randevuId);
+                } else if (selectedRandevular.length < maxSelections) {
+                    selectedRandevular.push(calisanRandevuId);
                     this.classList.remove("btn-outline-dark");
                     this.classList.add("btn-dark");
                 } else {
                     errorMessage.classList.remove("d-none");
                     setTimeout(() => {
                         errorMessage.classList.add("d-none");
-                    }, 3000); // 3 saniye sonra hata mesajını gizle
+                    }, 3000);
                     return;
                 }
 
-                hiddenInput.value = Array.from(selectedRandevular).join(",");
-                submitButton.disabled = selectedRandevular.size !== maxSelections;
+                // Güncel seçimleri gizli inputlara yaz
+                container.innerHTML = selectedRandevular.map((id, i) => `
+                    <input type="hidden" name="RandevuBitirModel.CalisanRandevular[${i}].CalisanRandevuId" value="${id}" />
+                `).join("");
+
+                // Butonu aktif/deaktif yap
+                submitButton.disabled = selectedRandevular.length !== maxSelections;
             });
         });
     });
 </script>
+
 
 <style>
     .container {

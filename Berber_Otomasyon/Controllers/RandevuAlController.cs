@@ -133,20 +133,33 @@ namespace Berber_Otomasyon.Controllers
         {
             if (TempData["RandevuAlModel"] is string randevuAlModelJson)
             {
-                var randevuAlModel = System.Text.Json.JsonSerializer.Deserialize<RandevuAlModel>(randevuAlModelJson, new JsonSerializerOptions
+                var randevuAlModel = System.Text.Json.JsonSerializer.Deserialize<RandevuAlModel>(
+                    randevuAlModelJson,
+                    new JsonSerializerOptions
+                    {
+                        ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                    });
+
+                // RandevuBitirModel'in null olmadığından emin olun
+                if (randevuAlModel.RandevuBitirModel == null)
                 {
-                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
-                });
-                if(!(randevuAlModel.ToplamSure > 0)) return RedirectToAction(nameof(RandevuKisit));
+                    randevuAlModel.RandevuBitirModel = new RandevuBitirModel
+                    {
+                        IslemTurleri = new List<IslemTuru>(), // Varsayılan olarak boş listeler oluştur
+                        CalisanRandevular = new List<CalisanRandevu>()
+                    };
+                }
+
                 return View(randevuAlModel);
             }
 
-
             return RedirectToAction(nameof(RandevuKisit));
         }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult RandevuIstek(RandevuBitirModel randevuBitirModel)
+        public IActionResult RandevuIstek(RandevuAlModel randevuAlModel)
         {
             var FoundMusteriId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -155,26 +168,35 @@ namespace Berber_Otomasyon.Controllers
                 return Unauthorized("Kullanıcı kimlik bilgisi bulunamadı.");
             }
 
-            if (randevuBitirModel.RandevuTarih == null)
+            if (randevuAlModel.RandevuBitirModel.RandevuTarih == null)
             {
                 return BadRequest("Randevu tarihi boş olamaz.");
             }
 
-            if (randevuBitirModel.CalisanRandevular == null || !randevuBitirModel.CalisanRandevular.Any())
-            {
+            if (randevuAlModel.RandevuBitirModel.CalisanRandevular == null || !randevuAlModel.RandevuBitirModel.CalisanRandevular.Any())
+            {                
                 return BadRequest("Çalışan randevular listesi boş olamaz.");
             }
 
+            /*string x = "";
+            foreach (var item in randevuAlModel.RandevuBitirModel.CalisanRandevular)
+            {
+                 x += item.CalisanRandevuId;
+            }
+            return BadRequest(x);*/
+
             List<MusteriRandevu> musteriRandevular = new List<MusteriRandevu>();
 
-            foreach (var calisanRandevu in randevuBitirModel.CalisanRandevular)
+            foreach (var calisanRandevu in randevuAlModel.RandevuBitirModel.CalisanRandevular)
             {
                 MusteriRandevu musteriRandevu = new MusteriRandevu
                 {
-                    RandevuTarih = randevuBitirModel.RandevuTarih,
+                    RandevuTarih = randevuAlModel.RandevuBitirModel.RandevuTarih,
+                    ToplamSure = randevuAlModel.RandevuBitirModel.ToplamSure,
+                    ToplamUcret = randevuAlModel.RandevuBitirModel.ToplamUcret,
                     MusteriId = FoundMusteriId,
                     CalisanRandevuId = calisanRandevu.CalisanRandevuId,
-                    IslemSepetleri = randevuBitirModel.IslemTurleri?.Select(cr => new IslemSepeti
+                    IslemSepetleri = randevuAlModel.RandevuBitirModel.IslemTurleri?.Select(cr => new IslemSepeti
                     {
                         IslemTuruId = cr.IslemTuruId,
                     }).ToList() ?? new List<IslemSepeti>(),
@@ -186,7 +208,8 @@ namespace Berber_Otomasyon.Controllers
             _applicationDbContext.MusteriRandevular.AddRange(musteriRandevular);
             _applicationDbContext.SaveChanges();
 
-            return View();
+            return RedirectToAction("Index", "Home");
+
         }
 
     }

@@ -16,10 +16,12 @@ namespace Berber_Otomasyon.Models.ViewModels
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateOnly RandevuTarih { get; set; }
 
-        public ICollection<IslemTuru> IslemTurleri { get; set; }
+        public List<IslemTuru> IslemTurleri { get; set; }
 
-        public ICollection<Kullanici> Calisanlar { get; set; }
+        public List<Kullanici> Calisanlar { get; set; }
 
-        public ICollection<CalisanRandevularViewModel> CalisanRandevularViewModeller { get; set; }
+        public List<CalisanRandevularViewModel> CalisanRandevularViewModeller { get; set; }
+
+        public RandevuBitirModel RandevuBitirModel { get; set; }
     }
 }
