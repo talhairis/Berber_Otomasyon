@@ -58,7 +58,7 @@ namespace Berber_Otomasyon.Controllers
         }
 
         [HttpGet]
-        public IActionResult RegisterC(AddCalisanViewModel addCalisanViewModel)
+        public IActionResult RegisterC()
         {
             RegisterObjectModel registerObjectModel = new RegisterObjectModel();
             registerObjectModel.addCalisanViewModel.Randevular = _applicationDbContext.Randevular.ToList();
@@ -106,7 +106,7 @@ namespace Berber_Otomasyon.Controllers
                 AddErrors(result);
             }
 
-            return View(registerObjectModel);
+            return RedirectToAction(nameof(RegisterC));
         }
 
         private void AddErrors(IdentityResult result)

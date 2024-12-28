@@ -33,6 +33,11 @@ namespace Berber_Otomasyon.Data
                 .Property(i => i.Fiyat)
                 .HasColumnType("decimal(18, 2)");
 
+            //IslemSepeti tablosunda Fiyat alanı için veri tipi ayarlaması
+            modelBuilder.Entity<IslemSepeti>()
+                .Property(i => i.ToplamUcret)
+                .HasColumnType("decimal(18, 2)");
+
             // CalisanRandevu için yapılandırma
             modelBuilder.Entity<CalisanRandevu>()
                 .HasKey(cr => cr.CalisanRandevuId);
