@@ -1,12 +1,14 @@
 ﻿using Berber_Otomasyon.Data;
 using Berber_Otomasyon.Models;
 using Berber_Otomasyon.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json;
 
 namespace Berber_Otomasyon.Controllers
 {
+    [Authorize(Roles = "musteri")]
     public class RandevuAlController : Controller
     {
         private readonly ApplicationDbContext _applicationDbContext;

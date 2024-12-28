@@ -1,11 +1,13 @@
 ﻿using Berber_Otomasyon.Data;
 using Berber_Otomasyon.Models;
 using Berber_Otomasyon.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 
 namespace Berber_Otomasyon.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class RestApiController : Controller

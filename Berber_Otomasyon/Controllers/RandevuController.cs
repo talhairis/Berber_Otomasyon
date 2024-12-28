@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Berber_Otomasyon.Data;
 using Berber_Otomasyon.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Berber_Otomasyon.Controllers
 {
+    [Authorize(Roles = "admin, yonetici")]
     public class RandevuController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Berber_Otomasyon.Data;
 using Berber_Otomasyon.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Berber_Otomasyon.Controllers
 {
@@ -20,12 +21,14 @@ namespace Berber_Otomasyon.Controllers
         }
 
         // GET: IslemTuru
+        [Authorize(Roles = "admin, yonetici")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.IslemTurleri.ToListAsync());
         }
 
         // GET: IslemTuru/Details/5
+        [Authorize(Roles = "admin, yonetici")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +47,7 @@ namespace Berber_Otomasyon.Controllers
         }
 
         // GET: IslemTuru/Create
+        [Authorize(Roles = "admin, yonetici")]
         public IActionResult Create()
         {
             return View();
@@ -52,6 +56,7 @@ namespace Berber_Otomasyon.Controllers
         // POST: IslemTuru/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin, yonetici")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IslemTuruId,Isim,Aciklama,Fiyat,Sure")] IslemTuru islemTuru)
@@ -66,6 +71,7 @@ namespace Berber_Otomasyon.Controllers
         }
 
         // GET: IslemTuru/Edit/5
+        [Authorize(Roles = "admin, yonetici")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,6 +90,7 @@ namespace Berber_Otomasyon.Controllers
         // POST: IslemTuru/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "admin, yonetici")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IslemTuruId,Isim,Aciklama,Fiyat,Sure")] IslemTuru islemTuru)
@@ -117,6 +124,7 @@ namespace Berber_Otomasyon.Controllers
         }
 
         // GET: IslemTuru/Delete/5
+        [Authorize(Roles = "admin, yonetici")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,6 +143,7 @@ namespace Berber_Otomasyon.Controllers
         }
 
         // POST: IslemTuru/Delete/5
+        [Authorize(Roles = "admin, yonetici")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

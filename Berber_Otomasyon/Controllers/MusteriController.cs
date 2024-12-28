@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Berber_Otomasyon.Controllers
 {
+    [Authorize(Roles = "musteri")]
     public class MusteriController : Controller
     {
         private readonly ApplicationDbContext _applicationDbContext;

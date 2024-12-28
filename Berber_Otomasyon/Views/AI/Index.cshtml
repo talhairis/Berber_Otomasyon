@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Fotoğraf Yükle";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="photo">Fotoğraf Seçin</label>
+        <input type="file" class="form-control" id="photo" name="photo" />
+    </div>
+    <button type="submit" class="btn btn-primary">Yükle</button>
+</form>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger mt-3">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@if (ViewBag.Image != null)
+{
+    <div class="mt-3">
+        <h3>AI Yanıtı:</h3>
+        <img src="data:image/png;base64,@ViewBag.Image" alt="AI Response Image" />
+    </div>
+}

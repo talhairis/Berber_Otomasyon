@@ -1,11 +1,13 @@
 ﻿using Berber_Otomasyon.Data;
 using Berber_Otomasyon.Models;
 using Berber_Otomasyon.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Berber_Otomasyon.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RestConsumeController : Controller
     {
         private readonly ApplicationDbContext _applicationDbContext;

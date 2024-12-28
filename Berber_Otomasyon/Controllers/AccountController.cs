@@ -5,6 +5,7 @@ using Berber_Otomasyon.Models;
 using Berber_Otomasyon.Models.ViewModels;
 using Berber_Otomasyon.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Berber_Otomasyon.Controllers
 {
@@ -23,12 +24,14 @@ namespace Berber_Otomasyon.Controllers
             _signInManager = signInManager;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult RegisterM()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterM(RegisterViewModel registerViewModel)
@@ -57,6 +60,7 @@ namespace Berber_Otomasyon.Controllers
             return View(registerViewModel);
         }
 
+        [Authorize(Roles = "admin, yonetici")]
         [HttpGet]
         public IActionResult RegisterC()
         {
@@ -66,6 +70,7 @@ namespace Berber_Otomasyon.Controllers
             return View(registerObjectModel);
         }
 
+        [Authorize(Roles = "admin, yonetici")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterC(RegisterObjectModel registerObjectModel)
