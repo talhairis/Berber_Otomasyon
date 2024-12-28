@@ -1,7 +1,10 @@
 ﻿@model List<Berber_Otomasyon.Models.ViewModels.CalisanOnayliViewModel>
 
-@{
-    ViewData["Title"] = "Onaylı Randevular";
+@if (ViewData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewData["SuccessMessage"]
+    </div>
 }
 
 <div class="container">

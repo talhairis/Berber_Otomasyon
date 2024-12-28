@@ -120,19 +120,24 @@ namespace Berber_Otomasyon.Controllers
                 CalisanRandevularViewModeller = joinedRandevularTurn
             };
 
-            TempData["RandevuAlModel"] = System.Text.Json.JsonSerializer.Serialize(randevuAlModel, new JsonSerializerOptions
+            // RandevuAlModel nesnesini JSON olarak serialize ederek Session'a kaydediyoruz
+            HttpContext.Session.SetString("RandevuAlModel", System.Text.Json.JsonSerializer.Serialize(randevuAlModel, new JsonSerializerOptions
             {
                 ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve,
                 WriteIndented = true // Gerekirse düzenli yazım için
-            });
+            }));
 
             return RedirectToAction(nameof(RandevuIstek));
         }
 
         public IActionResult RandevuIstek()
         {
-            if (TempData["RandevuAlModel"] is string randevuAlModelJson)
+            // Session'dan veri alınıyor
+            var randevuAlModelJson = HttpContext.Session.GetString("RandevuAlModel");
+
+            if (!string.IsNullOrEmpty(randevuAlModelJson))
             {
+                // JSON'dan deserialize işlemi
                 var randevuAlModel = System.Text.Json.JsonSerializer.Deserialize<RandevuAlModel>(
                     randevuAlModelJson,
                     new JsonSerializerOptions
@@ -140,7 +145,7 @@ namespace Berber_Otomasyon.Controllers
                         ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
                     });
 
-                // RandevuBitirModel'in null olmadığından emin olun
+                // Null kontrolleri ve varsayılan değerler
                 if (randevuAlModel.RandevuBitirModel == null)
                 {
                     randevuAlModel.RandevuBitirModel = new RandevuBitirModel
@@ -208,7 +213,6 @@ namespace Berber_Otomasyon.Controllers
             _applicationDbContext.MusteriRandevular.AddRange(musteriRandevular);
             _applicationDbContext.SaveChanges();
 
-            TempData["SuccessMessage"] = "Randevu çalışanın onayına iletilmiştir.";
             return RedirectToAction("Index", "Home");
 
         }

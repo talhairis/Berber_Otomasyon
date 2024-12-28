@@ -23,6 +23,8 @@ namespace Berber_Otomasyon
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddSession();
+
             builder.Services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -54,7 +56,8 @@ namespace Berber_Otomasyon
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            
+
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

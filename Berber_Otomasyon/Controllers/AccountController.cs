@@ -70,7 +70,7 @@ namespace Berber_Otomasyon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterC(RegisterObjectModel registerObjectModel)
         {
-            if (!ModelState.IsValid) { ViewData["Message"] = "Model başarılı değil"; }
+            if (!ModelState.IsValid) { Console.WriteLine("Model başarılı değil"); }
 
             var user = new Kullanici
             {
@@ -128,7 +128,7 @@ namespace Berber_Otomasyon.Controllers
                 await _userManager.AddToRoleAsync(user, "calisan");
                 await _applicationDbContext.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Kayıt başarılı.";
+                ViewData["BasariMessage"] = "Kayıt başarılı.";
                 return RedirectToAction("Index", "Home");
             }
             AddErrors(result);

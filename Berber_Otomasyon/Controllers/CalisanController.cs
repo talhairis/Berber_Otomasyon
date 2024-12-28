@@ -200,11 +200,7 @@ namespace Berber_Otomasyon.Controllers
             {
                 randevu.OnayliRandevu = true;
                 _applicationDbContext.SaveChanges();
-                TempData["SuccessMessage"] = "Randevu başarıyla onaylandı.";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Randevu bulunamadı.";
+                ViewData["SuccessMessage"] = "Randevu başarıyla onaylandı.";
             }
 
             return RedirectToAction("OnayliRandevular");
