@@ -5,7 +5,7 @@
 }
 
 <div class="container">
-    <h1 class="text-center mb-4">Onaysız Randevular</h1>
+    <h1 class="text-center mb-4 text-primary">Onaysız Randevular</h1>
 
     @if (Model != null && Model.Any())
     {
@@ -36,9 +36,12 @@
     }
     else
     {
-        <p class="text-center text-danger">Onaysız randevunuz bulunmamaktadır.</p>
+        <p class="text-center text-danger fs-4">Onaysız randevunuz bulunmamaktadır.</p>
     }
 </div>
+
+<!-- FontAwesome Icon Kit -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 <style>
     .container {
@@ -51,16 +54,32 @@
         font-family: Arial, sans-serif;
     }
 
-    .list-group-item {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
+    h1 {
+        color: #007bff;
+        font-weight: bold;
     }
 
-        .list-group-item h4 {
-            color: #333;
+    .list-group-item {
+        background-color: #f8f9fa;
+        border: none;
+        border-left: 4px solid #007bff;
+    }
+
+        .list-group-item i {
+            color: #28a745;
+            margin-right: 10px;
         }
 
-        .list-group-item p {
-            margin: 5px 0;
+        .list-group-item:hover {
+            background-color: #e9ecef;
+            border-left: 4px solid #0056b3;
         }
+
+    .text-secondary {
+        font-weight: bold;
+    }
+
+    .text-success {
+        font-weight: bold;
+    }
 </style>

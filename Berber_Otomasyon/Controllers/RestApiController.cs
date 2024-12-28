@@ -7,7 +7,6 @@ using System.Drawing;
 
 namespace Berber_Otomasyon.Controllers
 {
-    [Authorize(Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class RestApiController : Controller
@@ -30,7 +29,7 @@ namespace Berber_Otomasyon.Controllers
                                 Rol = role.Name,
                                 KullaniciAdi = user.KullaniciAdi,
                                 KullaniciSoyadi = user.KullaniciSoyadi,
-                                CalisanUnvan = user.CalisanUnvan,
+                                CalisanUnvan = user.CalisanUnvan ?? "Unvan Yok",
                                 Email = user.Email,
                             };
 

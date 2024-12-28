@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace Berber_Otomasyon.Controllers
 {
-    [Authorize(Roles = "admin")]
     public class RestConsumeController : Controller
     {
         private readonly ApplicationDbContext _applicationDbContext;

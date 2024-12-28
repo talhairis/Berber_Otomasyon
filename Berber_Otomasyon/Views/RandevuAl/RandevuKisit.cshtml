@@ -7,12 +7,16 @@
 <div class="container">
     <h1 class="text-center mb-4">Randevu Kısıt</h1>
     <form asp-action="RandevuKisit" method="post">
-        <div class="form-group mb-3">
-            <label for="RandevuTarih">Randevu Tarihi</label>
-            <input type="date" id="RandevuTarih" asp-for="RandevuTarih" class="form-control" />
-            <span asp-validation-for="RandevuTarih" class="text-danger"></span>
+        <!-- Tarih Seçimi -->
+        <div class="form-group mb-4">
+            <label for="RandevuTarih" class="form-label">Randevu Tarihi</label>
+            <div class="input-group">
+                <input type="text" id="RandevuTarih" class="form-control date-picker" asp-for="RandevuTarih" placeholder="Tarih seçin..." readonly />
+                <span asp-validation-for="RandevuTarih" class="text-danger"></span>
+            </div>
         </div>
 
+        <!-- İşlem Türleri -->
         <h3>İşlem Türleri</h3>
         @foreach (var islem in Model.IslemTurleri)
         {
@@ -22,9 +26,66 @@
             </div>
         }
 
-        <button type="submit" class="btn btn-dark mt-3">Randevuları Göster</button>
+        <!-- Göster Butonu -->
+        <button type="submit" class="btn btn-dark mt-4">Randevuları Göster</button>
     </form>
 </div>
+
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <!-- Flatpickr için gerekli kütüphaneler -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Tarih seçici
+            flatpickr(".date-picker", {
+                dateFormat: "Y-m-d",
+                defaultDate: new Date(),
+                disableMobile: "true", // Mobil cihazlarda daha iyi görünüm
+            });
+        });
+    </script>
 }
+
+<!-- Stil -->
+<style>
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Playfair Display', serif;
+    }
+
+    .form-label {
+        font-size: 18px;
+        color: #333333;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .btn-dark {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        background-color: #333333;
+        color: #FFFFFF;
+        cursor: pointer;
+        border: none;
+    }
+
+        .btn-dark:hover {
+            background-color: #555555;
+        }
+
+    h1, h3 {
+        color: #333333;
+    }
+</style>
+
