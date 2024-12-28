@@ -6,11 +6,20 @@
         ? Url.Action("RandevuKisit", "RandevuAl") // Kullanıcı giriş yapmışsa Randevu sayfasına yönlendir
         : Url.Page("/Account/Login", new { area = "Identity" }); // Giriş yapılmamışsa Login sayfasına yönlendir
 }
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
 <div class="hero">
     <h1>Hoş Geldiniz</h1>
     <p>Profesyonel hizmetlerimizle siz değerli müşterilerimizi bekliyoruz.</p>
-    <a href="@randevuUrl" class="btn btn-dark">Randevu Al</a>
+    @if (!User.Identity.IsAuthenticated || User.IsInRole("musteri"))
+    {
+        <a href="@randevuUrl" class="btn btn-dark">Randevu Al</a>
+    }
 </div>
 
 <div class="services">

@@ -5,20 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Berber_Otomasyon
 {
-	public class Program
-	{
-		public static async Task Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
-			
-			// Add services to the container.
-			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(connectionString));
-			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-            //builder.Services.AddDefaultIdentity<Kullanici>(options => options.SignIn.RequireConfirmedAccount = true)
-            //	.AddEntityFrameworkStores<ApplicationDbContext>();
+            // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddIdentity<Kullanici, IdentityRole>()
                 .AddDefaultTokenProviders()
@@ -27,34 +24,37 @@ namespace Berber_Otomasyon
             builder.Services.AddControllersWithViews();
 
             builder.Services.Configure<IdentityOptions>(options =>
-			{
-				options.Password.RequireDigit = false;
-				options.Password.RequireLowercase = false;
-				options.Password.RequireUppercase = false;
-				options.Password.RequireNonAlphanumeric = false;
-				options.Password.RequiredLength = 6;
-				options.Password.RequiredUniqueChars = 1;
-			});
-
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 3;
+                options.Password.RequiredUniqueChars = 1;
+            });
 
             var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseMigrationsEndPoint();
-			}
-			else
-			{
-				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
+            app.UseCors(policy =>
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader());
 
-			app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -63,15 +63,16 @@ namespace Berber_Otomasyon
             {
                 var serviceProvider = scope.ServiceProvider;
                 await SeedRoles(serviceProvider, builder.Configuration);
+                await SeedUsers(serviceProvider);
             }
 
             app.MapControllerRoute(
-				name: "default",
-				pattern: "{controller=Home}/{action=Index}/{id?}");
-			app.MapRazorPages();
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
-			app.Run();
-		}
+            app.Run();
+        }
 
         public static async Task SeedRoles(IServiceProvider serviceProvider, IConfiguration configuration)
         {
@@ -88,6 +89,54 @@ namespace Berber_Otomasyon
                     {
                         await roleManager.CreateAsync(new IdentityRole(role));
                     }
+                }
+            }
+        }
+
+        public static async Task SeedUsers(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<Kullanici>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            // Kullanýcý bilgileri
+            var users = new[]
+            {
+                new { Email = "g221210002@sakarya.edu.tr", KullaniciAdi = "Talha", KullaniciSoyadi = "Ýris", Password = "sau", Role = "admin" },
+                new { Email = "g221210076@sakarya.edu.tr", KullaniciAdi = "Cengizhan", KullaniciSoyadi = "Keyfli", Password = "sau", Role = "admin" }
+            };
+
+            foreach (var userInfo in users)
+            {
+                // Kullanýcý var mý kontrol et
+                var user = await userManager.FindByEmailAsync(userInfo.Email);
+                if (user == null)
+                {
+                    // Yeni kullanýcý oluþtur
+                    user = new Kullanici
+                    {
+                        UserName = userInfo.Email,
+                        Email = userInfo.Email,
+                        KullaniciAdi = userInfo.KullaniciAdi,
+                        KullaniciSoyadi = userInfo.KullaniciSoyadi
+                    };
+
+                    var result = await userManager.CreateAsync(user, userInfo.Password);
+                    if (result.Succeeded)
+                    {
+                        // Role atama
+                        if (await roleManager.RoleExistsAsync(userInfo.Role))
+                        {
+                            await userManager.AddToRoleAsync(user, userInfo.Role);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Kullanýcý oluþturulamadý: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Kullanýcý zaten mevcut: {userInfo.Email}");
                 }
             }
         }

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Berber_Otomasyon.Models.ViewModels.KullaniciApiDto>
+
+@{
+    ViewData["Title"] = "Kullanıcı Listesi";
+}
+
+<div class="index-container">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Rol</th>
+                <th>Kullanıcı Adı</th>
+                <th>Kullanıcı Soyadı</th>
+                <th>Çalışan Unvan</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var kullanici in Model)
+                {
+                    <tr>
+                        <td>@kullanici.Id</td>
+                        <td>@kullanici.Rol</td>
+                        <td>@kullanici.KullaniciAdi</td>
+                        <td>@kullanici.KullaniciSoyadi</td>
+                        <td>@kullanici.CalisanUnvan</td>
+                        <td>@kullanici.Email</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">Kullanıcı bulunamadı.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .index-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: 'Playfair Display', serif;
+    }
+
+    h1 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 20px;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f2f2f2;
+    }
+
+    .btn-dark {
+        background-color: #333333;
+        color: #FFFFFF;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+        .btn-dark:hover {
+            background-color: #555555;
+        }
+
+    .btn-outline-dark {
+        border-color: #333333;
+        color: #333333;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #333333;
+            color: #FFFFFF;
+        }
+</style>

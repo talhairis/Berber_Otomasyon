@@ -126,9 +126,9 @@ namespace Berber_Otomasyon.Controllers
                 }
 
                 await _userManager.AddToRoleAsync(user, "calisan");
-
-                await _signInManager.SignInAsync(user, isPersistent: false);
                 await _applicationDbContext.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Kayıt başarılı.";
                 return RedirectToAction("Index", "Home");
             }
             AddErrors(result);

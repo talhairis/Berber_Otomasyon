@@ -14,15 +14,20 @@
             {
                 <div class="list-group-item mb-3 p-3 border rounded">
                     <h4 class="mb-2">@randevu.RandevuTarih.ToString("dd MMMM yyyy")</h4>
+                    <hr />
                     <p><strong>Çalışan:</strong> @randevu.CalisanAdi @randevu.CalisanSoyadi</p>
                     <p><strong>Saat:</strong> @randevu.BaslangicSaati.ToString("hh\\:mm") - @randevu.BitisSaati.ToString("hh\\:mm")</p>
                     <p><strong>Toplam Süre:</strong> @randevu.ToplamSure dakika</p>
                     <p><strong>Toplam Ücret:</strong> @randevu.ToplamUcret.ToString("C")</p>
                     <p><strong>İşlemler:</strong></p>
                     <ul>
-                        @foreach (var islem in randevu.IslemSepetleri)
+                        <hr />
+                        @foreach (var islem in randevu.IslemTurleri)
                         {
-                            <li>İşlem ID: @islem.IslemTuruId</li>
+                            <li>İşlem Adı: @islem.Isim</li>
+                            <li>İşlem Süresi: @islem.Sure dakika</li>
+                            <li>İşlem Ücreti: @islem.Fiyat.ToString("C")</li>
+                            <hr />
                         }
                     </ul>
                 </div>

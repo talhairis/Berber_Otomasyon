@@ -48,7 +48,7 @@
     <!-- Bootstrap Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Erkek Kuaför</a>
+            <a class="navbar-brand" href="/Home/Index">Erkek Kuaför</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -64,12 +64,17 @@
                             <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Ekle</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/api/RestApi">API</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="RestConsume" asp-action="Index">API Consume</a>
                         </li>
                     }
-                    else if (User.Identity.IsAuthenticated && User.IsInRole("calisan"))
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("yonetici"))
                     {
-                        <!-- Admin için Görünecek Linkler -->
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="IslemTuru" asp-action="Index">İşlem Türleri</a>
                         </li>
@@ -77,26 +82,34 @@
                             <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Ekle</a>
+                        </li>
+                    }
+                    else if (User.Identity.IsAuthenticated && User.IsInRole("calisan"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Calisan" asp-action="OnayliRandevular">Onaylı Randevular</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Calisan" asp-action="OnaysizRandevular">Onaysız Randevular</a>
                         </li>
                     }
                     else if (User.Identity.IsAuthenticated && User.IsInRole("musteri"))
                     {
-                        <!-- Misafir Kullanıcı için Görünecek Linkler -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="RandevuAl" asp-action="RandevuKisit">Randevu Al</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Musteri" asp-action="OnayliRandevular">Onaylı Randevular</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Musteri" asp-action="OnaysizRandevular">Onaysız Randevular</a>
                         </li>
+                    }
+                    else
+                    {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterC">Çalışan Olarak Kaydol</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="IslemTuru" asp-action="Index">İşlem Türleri</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Randevu" asp-action="Index">Randevular</a>
+                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="RegisterM">Kaydol</a>
                         </li>
                     }
                 </ul>
@@ -114,7 +127,7 @@
 
     <!-- Footer -->
     <footer>
-        &copy; 2024 Erkek Kuaför. Tüm hakları saklıdır. | <a href="/privacy">Gizlilik Politikası</a>
+        &copy; 2024 Erkek Kuaför. Tüm hakları saklıdır. | <a href="#">Gizlilik Politikası</a>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

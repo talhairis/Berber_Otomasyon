@@ -1,11 +1,11 @@
-﻿@model List<Berber_Otomasyon.Models.ViewModels.MusteriOnayliViewModel>
+﻿@model List<Berber_Otomasyon.Models.ViewModels.CalisanOnayliViewModel>
 
 @{
-    ViewData["Title"] = "Onaylı Randevular";
+    ViewData["Title"] = "Onaysız Randevular";
 }
 
 <div class="container">
-    <h1 class="text-center mb-4">Onaylı Randevular</h1>
+    <h1 class="text-center mb-4">Onaysız Randevular</h1>
 
     @if (Model != null && Model.Any())
     {
@@ -15,7 +15,7 @@
                 <div class="list-group-item mb-3 p-3 border rounded">
                     <h4 class="mb-2">@randevu.RandevuTarih.ToString("dd MMMM yyyy")</h4>
                     <hr />
-                    <p><strong>Çalışan:</strong> @randevu.CalisanAdi @randevu.CalisanSoyadi</p>
+                    <p><strong>Çalışan:</strong> @randevu.MusteriAdi @randevu.MusteriSoyadi</p>
                     <p><strong>Saat:</strong> @randevu.BaslangicSaati.ToString("hh\\:mm") - @randevu.BitisSaati.ToString("hh\\:mm")</p>
                     <p><strong>Toplam Süre:</strong> @randevu.ToplamSure dakika</p>
                     <p><strong>Toplam Ücret:</strong> @randevu.ToplamUcret.ToString("C")</p>
@@ -30,13 +30,19 @@
                             <hr />
                         }
                     </ul>
+
+                    <!-- Onay Butonu -->
+                    <form asp-action="RandevuOnayla" asp-controller="Calisan" method="post">
+                        <input type="hidden" name="musteriRandevuId" value="@randevu.MusteriRandevuId" />
+                        <button type="submit" class="btn btn-success">Onayla</button>
+                    </form>
                 </div>
             }
         </div>
     }
     else
     {
-        <p class="text-center text-danger">Onaylı randevunuz bulunmamaktadır.</p>
+        <p class="text-center text-danger">Onaysız randevunuz bulunmamaktadır.</p>
     }
 </div>
 

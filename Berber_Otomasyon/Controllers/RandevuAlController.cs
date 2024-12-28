@@ -208,6 +208,7 @@ namespace Berber_Otomasyon.Controllers
             _applicationDbContext.MusteriRandevular.AddRange(musteriRandevular);
             _applicationDbContext.SaveChanges();
 
+            TempData["SuccessMessage"] = "Randevu çalışanın onayına iletilmiştir.";
             return RedirectToAction("Index", "Home");
 
         }

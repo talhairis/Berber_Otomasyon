@@ -1,4 +1,4 @@
-﻿@model List<Berber_Otomasyon.Models.ViewModels.MusteriOnayliViewModel>
+﻿@model List<Berber_Otomasyon.Models.ViewModels.CalisanOnayliViewModel>
 
 @{
     ViewData["Title"] = "Onaylı Randevular";
@@ -15,7 +15,7 @@
                 <div class="list-group-item mb-3 p-3 border rounded">
                     <h4 class="mb-2">@randevu.RandevuTarih.ToString("dd MMMM yyyy")</h4>
                     <hr />
-                    <p><strong>Çalışan:</strong> @randevu.CalisanAdi @randevu.CalisanSoyadi</p>
+                    <p><strong>Çalışan:</strong> @randevu.MusteriAdi @randevu.MusteriSoyadi</p>
                     <p><strong>Saat:</strong> @randevu.BaslangicSaati.ToString("hh\\:mm") - @randevu.BitisSaati.ToString("hh\\:mm")</p>
                     <p><strong>Toplam Süre:</strong> @randevu.ToplamSure dakika</p>
                     <p><strong>Toplam Ücret:</strong> @randevu.ToplamUcret.ToString("C")</p>

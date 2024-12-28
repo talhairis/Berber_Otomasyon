@@ -2,6 +2,8 @@
 using Berber_Otomasyon.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace Berber_Otomasyon.Controllers
 {
@@ -33,6 +35,8 @@ namespace Berber_Otomasyon.Controllers
                                         on calisanRandevu.CalisanRandevuId equals musteriRandevu.CalisanRandevuId
                                     join islemSepeti in _applicationDbContext.IslemSepetleri
                                         on musteriRandevu.MusteriRandevuId equals islemSepeti.MusteriRandevuId
+                                    join islemTuru in _applicationDbContext.IslemTurleri
+                                        on islemSepeti.IslemTuruId equals islemTuru.IslemTuruId
                                     join randevu in _applicationDbContext.Randevular
                                         on calisanRandevu.RandevuId equals randevu.RandevuId
                                     where musteriRandevu.MusteriId == FoundMusteriId && musteriRandevu.OnayliRandevu
@@ -45,8 +49,9 @@ namespace Berber_Otomasyon.Controllers
                                         RandevuTarih = musteriRandevu.RandevuTarih,
                                         ToplamSure = musteriRandevu.ToplamSure,
                                         ToplamUcret = musteriRandevu.ToplamUcret,
-                                        IslemSepeti = islemSepeti
+                                        islemTuru = islemTuru,
                                     }).ToList();
+
 
             // Sorgu sonucunu MusteriOnayliViewModel türüne dönüştürme
             List<MusteriOnayliViewModel> musteriOnayliListesi = onayliRandevular
@@ -69,7 +74,7 @@ namespace Berber_Otomasyon.Controllers
                     RandevuTarih = group.Key.RandevuTarih,
                     ToplamSure = group.Key.ToplamSure,
                     ToplamUcret = group.Key.ToplamUcret,
-                    IslemSepetleri = group.Select(g => g.IslemSepeti).ToList()
+                    IslemTurleri = group.Select(g => g.islemTuru).ToList()
                 })
                 .ToList();
 
@@ -89,13 +94,15 @@ namespace Berber_Otomasyon.Controllers
                               where role.Name == "calisan"
                               select user).ToList();
 
-            var onayliRandevular = (from calisan in calisanlar
+            var onaysizRandevular = (from calisan in calisanlar
                                     join calisanRandevu in _applicationDbContext.CalisanRandevular
                                         on calisan.Id equals calisanRandevu.CalisanId
                                     join musteriRandevu in _applicationDbContext.MusteriRandevular
                                         on calisanRandevu.CalisanRandevuId equals musteriRandevu.CalisanRandevuId
                                     join islemSepeti in _applicationDbContext.IslemSepetleri
                                         on musteriRandevu.MusteriRandevuId equals islemSepeti.MusteriRandevuId
+                                    join islemTuru in _applicationDbContext.IslemTurleri
+                                        on islemSepeti.IslemTuruId equals islemTuru.IslemTuruId
                                     join randevu in _applicationDbContext.Randevular
                                         on calisanRandevu.RandevuId equals randevu.RandevuId
                                     where musteriRandevu.MusteriId == FoundMusteriId && !musteriRandevu.OnayliRandevu
@@ -108,11 +115,12 @@ namespace Berber_Otomasyon.Controllers
                                         RandevuTarih = musteriRandevu.RandevuTarih,
                                         ToplamSure = musteriRandevu.ToplamSure,
                                         ToplamUcret = musteriRandevu.ToplamUcret,
-                                        IslemSepeti = islemSepeti
+                                        islemTuru = islemTuru,
                                     }).ToList();
 
+
             // Sorgu sonucunu MusteriOnayliViewModel türüne dönüştürme
-            List<MusteriOnayliViewModel> musteriOnayliListesi = onayliRandevular
+            List<MusteriOnayliViewModel> musteriOnaysizListesi = onaysizRandevular
                 .GroupBy(r => new
                 {
                     r.CalisanAdi,
@@ -132,12 +140,12 @@ namespace Berber_Otomasyon.Controllers
                     RandevuTarih = group.Key.RandevuTarih,
                     ToplamSure = group.Key.ToplamSure,
                     ToplamUcret = group.Key.ToplamUcret,
-                    IslemSepetleri = group.Select(g => g.IslemSepeti).ToList()
+                    IslemTurleri = group.Select(g => g.islemTuru).ToList()
                 })
                 .ToList();
 
 
-            return View(musteriOnayliListesi);
+            return View(musteriOnaysizListesi);
         }
     }
 }
