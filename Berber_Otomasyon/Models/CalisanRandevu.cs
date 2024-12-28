@@ -8,8 +8,13 @@ namespace Berber_Otomasyon.Models
         [Key]
         public int CalisanRandevuId { get; set; }
 
+        [Display(Name = "Randevu Tarihi")]
+        [Required(ErrorMessage = "Lütfen randevu tarihini seçiniz!")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateOnly RandevuTarih { get; set; }
+
         [Display(Name = "Randevu Onayı")]
-        public bool OnayliRandevu { get; set; } = false;
+        public bool OnayliRandevu { get; set; }
 
         public string CalisanId { get; set; }
         public Calisan Calisan { get; set; }

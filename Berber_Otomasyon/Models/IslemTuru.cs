@@ -21,7 +21,7 @@ namespace Berber_Otomasyon.Models
         [Required(ErrorMessage = "Lütfen işlem türünün fiyatını giriniz!")]
         public decimal Fiyat { get; set; }
 
-        [Display(Name = "İşlem Türünün Suresi")]
+        [Display(Name = "İşlem Türünün Süresi")]
         [Required(ErrorMessage = "Lütfen işlem türünün süresini giriniz!")]
         [Range(0, 60, ErrorMessage = "Lütfen işlem türünün süresini uygun aralıkta(0-60) giriniz!")]
         public int Sure { get; set; }

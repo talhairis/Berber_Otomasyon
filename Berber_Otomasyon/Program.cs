@@ -7,7 +7,7 @@ namespace Berber_Otomasyon
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 			
@@ -59,6 +59,12 @@ namespace Berber_Otomasyon
             app.UseAuthentication();
             app.UseAuthorization();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                await SeedRoles(serviceProvider); // Rolleri baþlatma iþlemi burada çaðrýlýr
+            }
+
             app.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -66,5 +72,15 @@ namespace Berber_Otomasyon
 
 			app.Run();
 		}
-	}
+
+        public static async Task SeedRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (!await roleManager.RoleExistsAsync("musteri"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("musteri"));
+            }
+        }
+    }
 }

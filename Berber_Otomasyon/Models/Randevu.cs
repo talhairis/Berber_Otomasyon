@@ -9,10 +9,12 @@ namespace Berber_Otomasyon.Models
         public int RandevuId { get; set; }
 
         [Display(Name = "Randevu Başlangıç Saati")]
+        [DisplayFormat(DataFormatString = @"{0:hh\:mm}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Lütfen randevu başlangıç saatini giriniz!")]
         public TimeSpan BaslangicSaati { get; set; }
 
         [Display(Name = "Randevu Bitiş Saati")]
+        [DisplayFormat(DataFormatString = @"{0:hh\:mm}", ApplyFormatInEditMode = true)]
         [Required(ErrorMessage = "Lütfen randevu bitiş saatini giriniz!")]
         public TimeSpan BitisSaati { get; set; }
 

@@ -24,7 +24,12 @@ namespace Berber_Otomasyon.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            //IslemTuru tablosunda Fiyat alanı için kısıtlama
+            //CalisanRandevu tablosunda RandevuTarih alanı için veri tipi ayarlaması
+            modelBuilder.Entity<CalisanRandevu>()
+                .Property(cr => cr.RandevuTarih)
+                .HasColumnType("date");
+
+            //IslemTuru tablosunda Fiyat alanı için veri tipi ayarlaması
             modelBuilder.Entity<IslemTuru>()
                 .Property(i => i.Fiyat)
                 .HasColumnType("decimal(18, 2)");
