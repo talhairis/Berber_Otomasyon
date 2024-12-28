@@ -62,7 +62,7 @@ namespace Berber_Otomasyon
             using (var scope = app.Services.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
-                await SeedRoles(serviceProvider); // Rolleri baþlatma iþlemi burada çaðrýlýr
+                await SeedRoles(serviceProvider, builder.Configuration);
             }
 
             app.MapControllerRoute(
@@ -73,13 +73,22 @@ namespace Berber_Otomasyon
 			app.Run();
 		}
 
-        public static async Task SeedRoles(IServiceProvider serviceProvider)
+        public static async Task SeedRoles(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            if (!await roleManager.RoleExistsAsync("musteri"))
+            // Rolleri appsettings.json'dan oku
+            var roles = configuration.GetSection("Roles").Get<string[]>();
+
+            if (roles != null)
             {
-                await roleManager.CreateAsync(new IdentityRole("musteri"));
+                foreach (var role in roles)
+                {
+                    if (!await roleManager.RoleExistsAsync(role))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(role));
+                    }
+                }
             }
         }
     }

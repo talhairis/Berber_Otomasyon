@@ -11,8 +11,7 @@ namespace Berber_Otomasyon.Data
 		{
 		}
 
-        public DbSet<Calisan> Calisanlar { get; set; }
-        public DbSet<Musteri> Musteriler { get; set; }
+        public DbSet<Kullanici> Kullanicilar { get; set; }
 		public DbSet<Randevu> Randevular { get; set;}
         public DbSet<IslemTuru> IslemTurleri { get; set; }
         public DbSet<CalisanRandevu> CalisanRandevular { get; set; }

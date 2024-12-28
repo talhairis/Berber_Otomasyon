@@ -9,7 +9,7 @@ namespace Berber_Otomasyon.Models
         public int CalisanIslemId { get; set; }
 
         public string CalisanId { get; set; }
-        public Calisan Calisan { get; set; }
+        public Kullanici Calisan { get; set; }
 
         public int IslemTuruId { get; set; }
         public IslemTuru IslemTuru { get; set; }

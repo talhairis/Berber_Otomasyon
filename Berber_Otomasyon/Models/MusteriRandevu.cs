@@ -9,7 +9,7 @@ namespace Berber_Otomasyon.Models
         public int MusteriRandevuId { get; set; }
 
         public string MusteriId { get; set; }
-        public Musteri Musteri { get; set; }
+        public Kullanici Musteri { get; set; }
 
         public int CalisanRandevuId { get; set; }
         public CalisanRandevu CalisanRandevu { get; set; }
